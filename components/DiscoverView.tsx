@@ -5,6 +5,7 @@ import { Stream } from '../types';
 interface DiscoverViewProps {
   onLiveClick: (stream: Stream) => void;
   onFamilyClick?: () => void;
+  onRankingsClick?: () => void;
 }
 
 const CATEGORIES = ['All', 'Games', 'Music', 'Movie', 'Chat', 'Dance'];
@@ -74,7 +75,7 @@ const TOP_STREAMERS = [
     { rank: 6, name: 'Darlene Robertson', gem: '281.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20blonde?width=100&height=100&seed=6&nologo=true' },
 ];
 
-export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamilyClick }) => {
+export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamilyClick, onRankingsClick }) => {
   const [activeFamilyTab, setActiveFamilyTab] = useState('Level');
   const currentFamilyData = RANKING_DATA[activeFamilyTab];
 
@@ -231,7 +232,10 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamil
                     <h3 className="text-base font-bold text-white">Family Ranking</h3>
                     <p className="text-xs text-gray-400 mt-1">Top Communities</p>
                 </div>
-                 <button className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-5 py-2 rounded-lg transition-colors border border-white/10 shadow-sm">
+                 <button 
+                    onClick={onRankingsClick}
+                    className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-5 py-2 rounded-lg transition-colors border border-white/10 shadow-sm"
+                 >
                     View
                 </button>
             </div>

@@ -696,10 +696,6 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                 { id: 'slogan', page: 'slogan', icon: MessageSquareQuote, label: 'Family Slogan', value: familyData.slogan, truncate: true },
                 { id: 'avatar', page: 'avatar', icon: Camera, label: 'Family Avatar', value: '' },
                 { id: 'cover', page: 'cover', icon: Image, label: 'Background Cover', value: 'Lv.5 Required' }, // Removed locked:true to allow demo
-                { 
-                    id: 'disband', page: null, icon: AlertTriangle, label: 'Disband Family', value: '', 
-                    textColor: 'text-red-500', subtitle: 'Disband a family above Lv 10 requires the consent of at least 5 members' 
-                }
             ]
         },
         {
@@ -727,7 +723,6 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                 if (['management', 'members', 'tasks'].includes(section.id)) return null;
             }
             const visibleItems = section.items.filter(item => {
-                if (demoRole === 'Admin' && item.id === 'disband') return false;
                 return true;
             });
             if (visibleItems.length === 0) return null;
@@ -972,7 +967,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                  </div>
                  
                  <div className="mt-4 text-[10px] text-gray-600 text-center px-4">
-                     {demoRole === 'Chief' && "Full access. Can Disband/Transfer. Cannot Leave."}
+                     {demoRole === 'Chief' && "Full access. Can Transfer. Cannot Leave."}
                      {demoRole === 'Admin' && "Can Manage Members & Tasks. Cannot Disband/Transfer."}
                      {demoRole === 'Member' && "Read-only access to most settings. Can Leave Family."}
                  </div>

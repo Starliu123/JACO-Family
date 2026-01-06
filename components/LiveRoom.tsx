@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Stream } from '../types';
 import { FamilyGuestView } from './FamilyGuestView';
+import { GuestProfileView } from './GuestProfileView';
 
 interface LiveRoomProps {
   stream: Stream;
@@ -38,7 +39,7 @@ const VIEWER_AVATARS = [
 ];
 
 // --- Sub-Component: User Profile Modal ---
-const UserProfileModal = ({ user, onClose, onFamilyClick }: { user: any, onClose: () => void, onFamilyClick: () => void }) => {
+const UserProfileModal = ({ user, onClose, onFamilyClick, onProfileClick }: { user: any, onClose: () => void, onFamilyClick: () => void, onProfileClick: () => void }) => {
     return (
         <div className="absolute inset-0 z-[200] flex flex-col justify-end isolate">
             {/* Backdrop */}
@@ -52,13 +53,16 @@ const UserProfileModal = ({ user, onClose, onFamilyClick }: { user: any, onClose
                 {/* Drag Handle */}
                 <div className="w-12 h-1.5 bg-gray-600/40 rounded-full mx-auto mb-6"></div>
                 
-                {/* Header Section: Avatar + Info */}
-                <div className="flex items-start gap-4 mb-6">
+                {/* Header Section: Avatar + Info (Clickable) */}
+                <div 
+                    className="flex items-start gap-4 mb-6 cursor-pointer group"
+                    onClick={onProfileClick}
+                >
                      {/* Avatar */}
                      <div className="relative flex-shrink-0">
                          <img 
                             src={user.avatar || user.thumbnail}
-                            className="w-20 h-20 rounded-full object-cover border-[3px] border-[#18181b] shadow-lg" 
+                            className="w-20 h-20 rounded-full object-cover border-[3px] border-[#18181b] shadow-lg group-active:scale-95 transition-transform" 
                             alt="Profile"
                          />
                          {/* Streamer Tag Overlay */}
@@ -68,7 +72,7 @@ const UserProfileModal = ({ user, onClose, onFamilyClick }: { user: any, onClose
                      </div>
 
                      {/* Info Column */}
-                     <div className="flex flex-col pt-1 gap-1 flex-1 min-w-0 pl-1">
+                     <div className="flex flex-col pt-1 gap-1 flex-1 min-w-0 pl-1 group-active:opacity-80 transition-opacity">
                         {/* Line 1: Name + Verified */}
                         <div className="flex items-center gap-1.5 flex-wrap">
                              <h2 className="text-xl font-bold text-white leading-tight">
@@ -78,6 +82,7 @@ const UserProfileModal = ({ user, onClose, onFamilyClick }: { user: any, onClose
                             <div className="bg-[#A540FF] rounded-full p-0.5 flex-shrink-0">
                                 <Check className="w-3 h-3 text-white" strokeWidth={4} />
                             </div>
+                            <ChevronRight className="w-4 h-4 text-gray-500" />
                         </div>
 
                         {/* Line 2: Username */}
@@ -113,7 +118,10 @@ const UserProfileModal = ({ user, onClose, onFamilyClick }: { user: any, onClose
                      </div>
 
                      {/* More Button (Top Right) */}
-                     <button className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors flex-shrink-0">
+                     <button 
+                        onClick={(e) => { e.stopPropagation(); }} 
+                        className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors flex-shrink-0"
+                     >
                         <MoreHorizontal className="w-5 h-5" />
                      </button>
                 </div>
@@ -206,6 +214,7 @@ export const LiveRoom: React.FC<LiveRoomProps> = ({ stream, onClose }) => {
   const [joinNotification, setJoinNotification] = useState<string | null>("Angel Vetrovs joined");
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showGuestFamily, setShowGuestFamily] = useState(false);
+  const [showGuestProfile, setShowGuestProfile] = useState(false); // New state for Guest Profile View
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll chat
@@ -251,12 +260,27 @@ export const LiveRoom: React.FC<LiveRoomProps> = ({ stream, onClose }) => {
           </div>
       )}
 
+      {/* Guest Profile View (Full Overlay) */}
+      {showGuestProfile && (
+          <div className="absolute inset-0 z-[300]">
+              <GuestProfileView 
+                  user={stream}
+                  onBack={() => setShowGuestProfile(false)}
+                  onNavigateToFamily={() => setShowGuestFamily(true)}
+              />
+          </div>
+      )}
+
       {/* Profile Modal */}
       {showProfileModal && (
           <UserProfileModal 
              user={stream} 
              onClose={() => setShowProfileModal(false)} 
              onFamilyClick={() => setShowGuestFamily(true)}
+             onProfileClick={() => {
+                 setShowProfileModal(false);
+                 setShowGuestProfile(true);
+             }}
           />
       )}
 

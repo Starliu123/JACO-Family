@@ -132,8 +132,13 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [themeColor, setThemeColor] = useState('#000000');
-  const [familyTab, setFamilyTab] = useState<FamilyTabType>('home');
+  
+  // Navigation State
+  const [familyTab, setFamilyTab] = useState<FamilyTabType>('home'); // For My Family view
+  const [familyGuestTab, setFamilyGuestTab] = useState<'home' | 'rankings' | 'events'>('home'); // For Guest View tabs
   const [currentStream, setCurrentStream] = useState<Stream | null>(null);
+  const [guestViewMode, setGuestViewMode] = useState<'home' | 'benefits'>('home');
+  const [previousPage, setPreviousPage] = useState<'home' | 'profile' | 'discover'>('home');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -248,7 +253,18 @@ const App: React.FC = () => {
           <div className="relative z-10 animate-fade-in bg-[#0f0f11]">
               <DiscoverView 
                 onLiveClick={handleOpenLive} 
-                onFamilyClick={() => setActivePage('family_guest')}
+                onFamilyClick={() => {
+                  setPreviousPage('discover');
+                  setGuestViewMode('home');
+                  setFamilyGuestTab('home');
+                  setActivePage('family_guest');
+                }}
+                onRankingsClick={() => {
+                  setPreviousPage('discover');
+                  setGuestViewMode('home'); // Ensure not in benefits mode
+                  setFamilyGuestTab('rankings');
+                  setActivePage('family_guest');
+                }}
               />
           </div>
         ) : activePage === 'profile' ? (
@@ -262,6 +278,12 @@ const App: React.FC = () => {
                 onNavigateToFamilyTasks={() => {
                     setFamilyTab('tasks');
                     setActivePage('family');
+                }}
+                onNavigateToFamilyGuest={(view = 'home') => {
+                   setPreviousPage('profile');
+                   setGuestViewMode(view);
+                   setFamilyGuestTab('home');
+                   setActivePage('family_guest');
                 }}
              />
           </div>
@@ -277,7 +299,9 @@ const App: React.FC = () => {
           /* Family Guest View */
           <div className="relative z-10 bg-[#0f0f11]">
              <FamilyGuestView 
-                onBack={() => setActivePage('discover')} 
+                onBack={() => setActivePage(previousPage)} 
+                initialView={guestViewMode}
+                initialTab={familyGuestTab}
              />
           </div>
         ) : (

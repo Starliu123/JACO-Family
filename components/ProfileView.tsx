@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Share2, MessageCircle, Edit3, ChevronRight, Wallet, DollarSign, Gift, Pin, Play, Hexagon } from 'lucide-react';
+import { Settings, Share2, MessageCircle, Edit3, ChevronRight, Wallet, DollarSign, Gift, Pin, Play, Hexagon, Shield, Swords, Users, Plus, CircleHelp } from 'lucide-react';
 
 const TASKS = [
     "Start a live stream",
@@ -10,10 +10,12 @@ const TASKS = [
 interface ProfileViewProps {
     onNavigateToFamily?: () => void;
     onNavigateToFamilyTasks?: () => void;
+    onNavigateToFamilyGuest?: (initialView?: 'home' | 'benefits') => void; // Updated signature
 }
 
-export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigateToFamily, onNavigateToFamilyTasks }) => {
+export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigateToFamily, onNavigateToFamilyTasks, onNavigateToFamilyGuest }) => {
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const [hasFamily, setHasFamily] = useState(true); // State to simulate family membership
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,8 +42,12 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigateToFamily, on
             
             {/* Top Navigation Icons */}
             <div className="absolute top-0 left-0 right-0 px-4 py-3 flex justify-between items-center z-20">
-                <button className="p-2 rounded-full hover:bg-black/20 transition backdrop-blur-sm">
-                    <Hexagon className="w-6 h-6 text-white" />
+                {/* SETTINGS BUTTON: Toggles Family State for Demo */}
+                <button 
+                    onClick={() => setHasFamily(!hasFamily)}
+                    className="p-2 rounded-full hover:bg-black/20 transition backdrop-blur-sm active:scale-95"
+                >
+                    <Hexagon className={`w-6 h-6 ${hasFamily ? 'text-white' : 'text-yellow-500'}`} />
                 </button>
                 <div className="flex items-center space-x-4">
                     <button className="p-2 rounded-full hover:bg-black/20 transition backdrop-blur-sm"><Share2 className="w-6 h-6 text-white" /></button>
@@ -153,78 +159,99 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigateToFamily, on
                 </div>
             </div>
 
-            {/* My Family Module (New) */}
+            {/* My Family Module (Dynamic State) */}
             <div>
                  <div 
                     className="flex justify-between items-center mb-2.5 px-1 cursor-pointer active:opacity-80 transition-opacity"
-                    onClick={onNavigateToFamily}
+                    onClick={hasFamily ? onNavigateToFamily : undefined}
                  >
                     <h3 className="font-bold text-sm text-white">My Family</h3>
-                    <ChevronRight className="w-4 h-4 text-gray-500" />
+                    {hasFamily && <ChevronRight className="w-4 h-4 text-gray-500" />}
                 </div>
-                <div className="grid grid-cols-2 gap-2.5">
-                    {/* Family Card */}
-                    <div 
-                        className="bg-[#1a1a1d] rounded-[5px] p-3 flex items-center shadow-sm h-20 cursor-pointer active:scale-95 transition-transform"
-                        onClick={onNavigateToFamily}
-                    >
-                        {/* Avatar with Golden Frame */}
-                        <div className="relative mr-3 flex-shrink-0">
-                            <div className="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-yellow-600 via-yellow-200 to-yellow-500 shadow-lg">
-                                <img 
-                                    src="https://image.pollinations.ai/prompt/Esports%20team%20logo%20shield%20purple%20lion?width=100&height=100&seed=45&nologo=true"
-                                    className="w-full h-full rounded-full object-cover border-2 border-[#1a1a1d]"
-                                    alt="Family"
-                                />
+                
+                {hasFamily ? (
+                    /* STATE A: HAS FAMILY (Existing) */
+                    <div className="grid grid-cols-2 gap-2.5 animate-in slide-in-from-right duration-300">
+                        {/* Family Card */}
+                        <div 
+                            className="bg-[#1a1a1d] rounded-[5px] p-3 flex items-center shadow-sm h-20 cursor-pointer active:scale-95 transition-transform"
+                            onClick={onNavigateToFamily}
+                        >
+                            {/* Avatar with Golden Frame */}
+                            <div className="relative mr-3 flex-shrink-0">
+                                <div className="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-yellow-600 via-yellow-200 to-yellow-500 shadow-lg">
+                                    <img 
+                                        src="https://image.pollinations.ai/prompt/Esports%20team%20logo%20shield%20purple%20lion?width=100&height=100&seed=45&nologo=true"
+                                        className="w-full h-full rounded-full object-cover border-2 border-[#1a1a1d]"
+                                        alt="Family"
+                                    />
+                                </div>
+                                {/* Level Badge - Smaller Size */}
+                                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-600 to-amber-500 text-white text-[7px] font-bold px-1 py-[1px] rounded-full border border-[#1a1a1d] shadow-sm z-10 whitespace-nowrap">
+                                    Lv 14
+                                </div>
                             </div>
-                            {/* Level Badge - Smaller Size */}
-                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-600 to-amber-500 text-white text-[7px] font-bold px-1 py-[1px] rounded-full border border-[#1a1a1d] shadow-sm z-10 whitespace-nowrap">
-                                Lv 14
+
+                            <div className="flex flex-col justify-center">
+                                <span className="text-[14px] font-bold text-white leading-tight">Royal Lions</span>
+                                <span className="text-[11px] text-gray-500 mt-1">154 Members</span>
                             </div>
                         </div>
 
-                        <div className="flex flex-col justify-center">
-                            <span className="text-[14px] font-bold text-white leading-tight">Royal Lions</span>
-                            <span className="text-[11px] text-gray-500 mt-1">154 Members</span>
+                        {/* Tasks Card */}
+                        <div 
+                            className="bg-[#1a1a1d] rounded-[5px] p-3 flex flex-col justify-between shadow-sm h-20 relative cursor-pointer active:scale-95 transition-transform"
+                            onClick={onNavigateToFamilyTasks}
+                        >
+                            <div className="flex justify-between items-start">
+                                 <span className="text-[13px] font-bold text-white">Today's Tasks</span>
+                                 {/* Restored Purple Background 2/5 */}
+                                 <span className="text-[9px] text-[#A540FF] bg-[#A540FF]/10 px-1.5 py-0.5 rounded font-bold">2/5</span>
+                            </div>
+                            
+                            {/* Task Carousel - Vertical Push Animation */}
+                            <div className="mt-auto w-full bg-white/5 rounded-[4px] px-2 py-1.5 relative overflow-hidden h-7">
+                                {TASKS.map((task, idx) => {
+                                    let positionClass = 'translate-y-full duration-0'; // Default: Waiting at bottom
+                                    
+                                    if (idx === currentTaskIndex) {
+                                        positionClass = 'translate-y-0 duration-500'; // Active
+                                    } else if (idx === (currentTaskIndex - 1 + TASKS.length) % TASKS.length) {
+                                        positionClass = '-translate-y-full duration-500'; // Exiting to top
+                                    }
+
+                                    return (
+                                        <div 
+                                            key={idx} 
+                                            className={`absolute inset-0 flex items-center justify-center transition-transform ease-in-out ${positionClass}`}
+                                        >
+                                            <span className="text-[10px] text-gray-300 font-medium truncate w-full text-center">
+                                                {task}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
-
-                    {/* Tasks Card */}
+                ) : (
+                    /* STATE B: NO FAMILY (Simplified) */
                     <div 
-                        className="bg-[#1a1a1d] rounded-[5px] p-3 flex flex-col justify-between shadow-sm h-20 relative cursor-pointer active:scale-95 transition-transform"
-                        onClick={onNavigateToFamilyTasks}
+                        onClick={() => onNavigateToFamilyGuest?.('benefits')}
+                        className="bg-[#1a1a1d] rounded-[5px] p-4 flex items-center justify-between cursor-pointer border border-white/5 shadow-sm active:scale-[0.99] transition-transform group animate-in slide-in-from-left duration-300"
                     >
-                        <div className="flex justify-between items-start">
-                             <span className="text-[13px] font-bold text-white">Today's Tasks</span>
-                             {/* Restored Purple Background 2/5 */}
-                             <span className="text-[9px] text-[#A540FF] bg-[#A540FF]/10 px-1.5 py-0.5 rounded font-bold">2/5</span>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                                <Shield className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+                            </div>
+                            <div>
+                                <div className="text-sm font-bold text-white group-hover:text-[#A540FF] transition-colors">Join a Family</div>
+                                <div className="text-[11px] text-gray-400 mt-0.5">You haven't joined a family yet. Tap to learn more.</div>
+                            </div>
                         </div>
-                        
-                        {/* Task Carousel - Vertical Push Animation */}
-                        <div className="mt-auto w-full bg-white/5 rounded-[4px] px-2 py-1.5 relative overflow-hidden h-7">
-                            {TASKS.map((task, idx) => {
-                                let positionClass = 'translate-y-full duration-0'; // Default: Waiting at bottom
-                                
-                                if (idx === currentTaskIndex) {
-                                    positionClass = 'translate-y-0 duration-500'; // Active
-                                } else if (idx === (currentTaskIndex - 1 + TASKS.length) % TASKS.length) {
-                                    positionClass = '-translate-y-full duration-500'; // Exiting to top
-                                }
-
-                                return (
-                                    <div 
-                                        key={idx} 
-                                        className={`absolute inset-0 flex items-center justify-center transition-transform ease-in-out ${positionClass}`}
-                                    >
-                                        <span className="text-[10px] text-gray-300 font-medium truncate w-full text-center">
-                                            {task}
-                                        </span>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Badge Gallery */}
