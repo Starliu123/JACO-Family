@@ -159,13 +159,13 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigateToFamily, on
                 </div>
             </div>
 
-            {/* My Family Module (Dynamic State) */}
+            {/* My Tribe Module (Dynamic State) */}
             <div>
                  <div 
                     className="flex justify-between items-center mb-2.5 px-1 cursor-pointer active:opacity-80 transition-opacity"
                     onClick={hasFamily ? onNavigateToFamily : undefined}
                  >
-                    <h3 className="font-bold text-sm text-white">My Family</h3>
+                    <h3 className="font-bold text-sm text-white">My Tribe</h3>
                     {hasFamily && <ChevronRight className="w-4 h-4 text-gray-500" />}
                 </div>
                 
@@ -245,8 +245,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onNavigateToFamily, on
                                 <Shield className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
                             </div>
                             <div>
-                                <div className="text-sm font-bold text-white group-hover:text-[#A540FF] transition-colors">Join a Family</div>
-                                <div className="text-[11px] text-gray-400 mt-0.5">You haven't joined a family yet. Tap to learn more.</div>
+                                <div className="text-sm font-bold text-white group-hover:text-[#A540FF] transition-colors">Join a Tribe</div>
+                                <div className="text-[11px] text-gray-400 mt-0.5">You haven't joined a tribe yet. Tap to learn more.</div>
                             </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />

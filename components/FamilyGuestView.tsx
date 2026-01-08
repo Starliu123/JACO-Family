@@ -32,7 +32,7 @@ interface RankingItem {
 
 // Role definitions for styling
 const ROLE_STYLES: Record<string, string> = {
-  'Family Chief': 'bg-gradient-to-r from-yellow-600 to-amber-500 text-white border-none',
+  'Tribe Chief': 'bg-gradient-to-r from-yellow-600 to-amber-500 text-white border-none',
   'Admin': 'bg-purple-500/20 text-purple-400 border border-purple-500/20',
   'Streamer': 'bg-pink-500/20 text-pink-400 border border-pink-500/20',
   'Supporter': 'bg-blue-500/20 text-blue-400 border border-blue-500/20',
@@ -53,7 +53,7 @@ const FAMILY_EVENTS = [
     },
     {
         id: 2,
-        title: "Family PK Championship",
+        title: "Tribe PK Championship",
         subtitle: "Battle for the Golden Shield 🛡️",
         image: "https://image.pollinations.ai/prompt/Esports%20arena%20stage%20red%20and%20orange%20lighting%20versus%20screen?width=800&height=600&seed=202&nologo=true",
         tag: "Hot",
@@ -62,7 +62,7 @@ const FAMILY_EVENTS = [
     },
     {
         id: 3,
-        title: "Voice of the Family",
+        title: "Voice of the Tribe",
         subtitle: "Sing & Win 50k Diamonds 💎",
         image: "https://image.pollinations.ai/prompt/Concert%20stage%20spotlight%20microphone%20pink%20purple%20atmosphere?width=800&height=600&seed=203&nologo=true",
         tag: "Big Reward",
@@ -274,6 +274,7 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
                                 </div>
                             )}
                         </div>
+                        <span className="text-xs text-gray-500 mt-3 font-medium">Tribe Avatar</span>
                     </div>
 
                     <div className="space-y-4">
@@ -282,7 +283,7 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
                                 type="text" 
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Family Name"
+                                placeholder="Tribe Name"
                                 className="w-full bg-[#1a1a1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-[#A540FF] transition-colors text-sm"
                             />
                         </div>
@@ -421,7 +422,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
     const roleContent = {
         All: [
             { icon: Shield, text: "Exclusive Identity & Belonging" },
-            { icon: Gift, text: "Exclusive Family Events & Rewards" },
+            { icon: Gift, text: "Exclusive Tribe Events & Rewards" },
             { icon: HeartHandshake, text: "Collective Echo of Every Action" }
         ],
         Streamer: [
@@ -452,7 +453,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                     <ChevronLeft className="w-6 h-6 text-white" />
                 </button>
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white">
-                    Family Introduction
+                    Tribe Introduction
                 </div>
                 <div className="w-10"></div>
             </div>
@@ -464,7 +465,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                 <div className="p-4">
                     <h2 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
                         <Sparkles className="w-5 h-5 text-[#A540FF]" />
-                        What is JACO Family?
+                        What is JACO Tribe?
                     </h2>
                     <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 group cursor-pointer">
                         {/* Thumbnail */}
@@ -495,7 +496,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                         How to Play?
                     </h2>
                     <div className="bg-[#1a1a1d] rounded-2xl p-5 border border-white/5">
-                        <p className="text-xs text-gray-400 mb-4">Every action in the family counts towards collective glory:</p>
+                        <p className="text-xs text-gray-400 mb-4">Every action in the tribe counts towards collective glory:</p>
                         
                         <div className="grid grid-cols-2 gap-3">
                             <div className="bg-[#252529] p-3 rounded-xl flex flex-col gap-2 border border-white/5">
@@ -523,7 +524,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                                 <Trophy className="w-6 h-6 text-[#A540FF]" />
                                 <div>
                                     <div className="font-bold text-white text-sm">Events</div>
-                                    <div className="text-[10px] text-gray-500">Battle for Family Rankings</div>
+                                    <div className="text-[10px] text-gray-500">Battle for Tribe Rankings</div>
                                 </div>
                             </div>
                         </div>
@@ -582,7 +583,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                         {/* How to Create */}
                         <div className="bg-[#1a1a1d] p-4 rounded-xl border border-white/5">
                             <h3 className="font-bold text-white text-sm mb-2 flex items-center gap-2">
-                                <PlusCircle className="w-4 h-4 text-[#A540FF]" /> How to Create a Family?
+                                <PlusCircle className="w-4 h-4 text-[#A540FF]" /> How to Create a Tribe?
                             </h3>
                             <div className="flex items-center justify-between text-[10px] text-gray-400">
                                 <div className="flex flex-col items-center gap-1 text-center max-w-[60px]">
@@ -613,7 +614,7 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                                 <UserPlus className="w-4 h-4 text-emerald-500" /> How to Join?
                             </h3>
                             <ul className="text-xs text-gray-400 space-y-1.5 list-disc list-inside">
-                                <li>Browse the <strong>Family Square</strong></li>
+                                <li>Browse the <strong>Tribe Square</strong></li>
                                 <li>Join via Streamer or Friend invitation</li>
                                 <li>Submit application & wait for approval</li>
                             </ul>
@@ -631,14 +632,14 @@ const FamilyBenefitsPage = ({ onBack, onDiscover, onCreate }: { onBack: () => vo
                     className="flex-1 bg-gradient-to-r from-[#A540FF] to-purple-600 hover:brightness-110 active:scale-[0.98] transition-all text-white font-bold py-3 rounded-xl shadow-lg shadow-purple-900/20 flex items-center justify-center gap-2"
                 >
                     <Compass className="w-4 h-4" />
-                    Discover Family
+                    Discover Tribe
                 </button>
                 <button 
                     onClick={onCreate}
                     className="flex-1 bg-[#1a1a1d] hover:bg-[#252529] active:scale-[0.98] transition-all border border-white/10 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2"
                 >
                     <PlusCircle className="w-4 h-4" />
-                    Create Family
+                    Create Tribe
                 </button>
             </div>
         </div>
@@ -710,7 +711,7 @@ const ApplyFamilyPage = ({ onBack, onSubmit, family }: { onBack: () => void, onS
 
                 <div className="mt-4 px-2">
                     <p className="text-[11px] text-gray-500 leading-relaxed">
-                        * The family administrator will review your application. Please be patient.
+                        * The tribe administrator will review your application. Please be patient.
                     </p>
                 </div>
             </div>
@@ -799,7 +800,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
   const allMembers = useMemo(() => {
     const roles = ['Member', 'Streamer', 'Supporter', 'Speaker', 'Admin'];
     const baseMembers = [
-      { id: 1, name: "Ahmed_Live", role: "Family Chief", contributionTotal: "1.2M", contributionMonth: "300K", contributionWeek: "50K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
+      { id: 1, name: "Ahmed_Live", role: "Tribe Chief", contributionTotal: "1.2M", contributionMonth: "300K", contributionWeek: "50K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
       { id: 2, name: "Desert_King", role: "Admin", contributionTotal: "850K", contributionMonth: "210K", contributionWeek: "45K", avatar: "https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true" },
       { id: 3, name: "Sarah_Gamer", role: "Admin", contributionTotal: "720K", contributionMonth: "180K", contributionWeek: "40K", avatar: "https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true" },
       { id: 4, name: "Falcon_Eye", role: "Streamer", contributionTotal: "450K", contributionMonth: "120K", contributionWeek: "30K", avatar: "https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true" },
@@ -883,7 +884,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                 
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-[#A540FF]" />
-                    Family Rankings
+                    Tribe Rankings
                 </div>
                 
                 <button className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 hover:bg-black/40 transition active:scale-95 flex-shrink-0">
@@ -904,10 +905,10 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                                     : 'text-gray-500 hover:text-gray-300'
                             }`}
                         >
-                            {cat === 'Level' && 'Family Level'}
+                            {cat === 'Level' && 'Tribe Level'}
                             {cat === 'Duration' && 'Live Duration'}
-                            {cat === 'Received' && 'Family Received'}
-                            {cat === 'Supported' && 'Family Supported'}
+                            {cat === 'Received' && 'Tribe Received'}
+                            {cat === 'Supported' && 'Tribe Supported'}
                             {cat === 'PK Wins' && 'PK Wins'}
                             {rankingCategory === cat && (
                                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[3px] bg-[#A540FF] rounded-t-full shadow-[0_-2px_8px_rgba(165,64,255,0.6)]"></div>
@@ -1125,7 +1126,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                     onClick={() => setShowBenefits(true)}
                     className="mt-4 text-xs text-gray-400 underline decoration-gray-500/50 hover:text-white hover:decoration-white transition-colors flex items-center gap-1"
                 >
-                    Why join a family?
+                    Why join a tribe?
                     <ChevronRight className="w-3 h-3" />
                 </button>
             </div>
@@ -1184,7 +1185,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                                 </div>
                                 <div className="relative">
                                     <img src={member.avatar} className="w-10 h-10 rounded-full bg-gray-700 object-cover border border-white/5" alt={member.name} />
-                                    {member.role === 'Family Chief' && (
+                                    {member.role === 'Tribe Chief' && (
                                         <div className="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full p-0.5 border border-[#1a1a1d]">
                                             <Crown className="w-2 h-2 text-black fill-black" />
                                         </div>

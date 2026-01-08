@@ -64,7 +64,7 @@ interface HistoryItem {
 
 // Role definitions for styling
 const ROLE_STYLES: Record<string, string> = {
-  'Family Chief': 'bg-gradient-to-r from-yellow-600 to-amber-500 text-white border-none',
+  'Tribe Chief': 'bg-gradient-to-r from-yellow-600 to-amber-500 text-white border-none',
   'Admin': 'bg-purple-500/20 text-purple-400 border border-purple-500/20',
   'Streamer': 'bg-pink-500/20 text-pink-400 border border-pink-500/20',
   'Supporter': 'bg-blue-500/20 text-blue-400 border border-blue-500/20',
@@ -85,7 +85,7 @@ const FAMILY_EVENTS = [
     },
     {
         id: 2,
-        title: "Family PK Championship",
+        title: "Tribe PK Championship",
         subtitle: "Battle for the Golden Shield 🛡️",
         image: "https://image.pollinations.ai/prompt/Esports%20arena%20stage%20red%20and%20orange%20lighting%20versus%20screen?width=800&height=600&seed=202&nologo=true",
         tag: "Hot",
@@ -94,7 +94,7 @@ const FAMILY_EVENTS = [
     },
     {
         id: 3,
-        title: "Voice of the Family",
+        title: "Voice of the Tribe",
         subtitle: "Sing & Win 50k Diamonds 💎",
         image: "https://image.pollinations.ai/prompt/Concert%20stage%20spotlight%20microphone%20pink%20purple%20atmosphere?width=800&height=600&seed=203&nologo=true",
         tag: "Big Reward",
@@ -128,7 +128,7 @@ const INITIAL_MY_TASKS: Task[] = [
         icon: CheckCircle2, 
         color: "text-green-400",
         title: "Daily Check-in", 
-        desc: "Check in to support your family",
+        desc: "Check in to support your tribe",
         rewards: [
             { type: 'exp', value: 50, icon: Trophy, label: 'Exp' }
         ],
@@ -169,7 +169,7 @@ const INITIAL_MY_TASKS: Task[] = [
         icon: Gift, 
         color: "text-pink-400", 
         title: "Send a Gift", 
-        desc: "Send any gift to family members",
+        desc: "Send any gift to tribe members",
         rewards: [
              { type: 'exp', value: 200, icon: Trophy, label: 'Exp' },
              { type: 'gem', value: 5, icon: Gem, label: 'Gems' }
@@ -197,7 +197,7 @@ const FAMILY_TASKS = [
     },
     {
         id: 2,
-        title: "Family Gift Value",
+        title: "Tribe Gift Value",
         current: 12500,
         target: 50000,
         unit: "coins",
@@ -342,7 +342,7 @@ const MOCK_HISTORY: HistoryItem[] = [
         date: YESTERDAY_DATE, // Yesterday
         timeDisplay: '22:45',
         user: { name: 'Riyadh_Drift', avatar: 'https://image.pollinations.ai/prompt/Race%20car%20driver?width=100&height=100&seed=55&nologo=true' },
-        action: 'Joined the family',
+        action: 'Joined the tribe',
         xp: 20
     },
     {
@@ -631,7 +631,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
   const allMembers = useMemo(() => {
     const roles = ['Member', 'Streamer', 'Supporter', 'Speaker', 'Admin'];
     const baseMembers = [
-      { id: 1, name: "Ahmed_Live", role: "Family Chief", contributionTotal: "1.2M", contributionMonth: "300K", contributionWeek: "50K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
+      { id: 1, name: "Ahmed_Live", role: "Tribe Chief", contributionTotal: "1.2M", contributionMonth: "300K", contributionWeek: "50K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
       { id: 2, name: "Desert_King", role: "Admin", contributionTotal: "850K", contributionMonth: "210K", contributionWeek: "45K", avatar: "https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true" },
       { id: 3, name: "Sarah_Gamer", role: "Admin", contributionTotal: "720K", contributionMonth: "180K", contributionWeek: "40K", avatar: "https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true" },
       { id: 4, name: "Falcon_Eye", role: "Streamer", contributionTotal: "450K", contributionMonth: "120K", contributionWeek: "30K", avatar: "https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true" },
@@ -843,7 +843,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                 {/* Absolute Centered Title */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-[#A540FF]" />
-                    Family Rankings
+                    Tribe Rankings
                 </div>
                 
                 <button className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 hover:bg-black/40 transition active:scale-95 flex-shrink-0">
@@ -864,10 +864,10 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                                     : 'text-gray-500 hover:text-gray-300'
                             }`}
                         >
-                            {cat === 'Level' && 'Family Level'}
+                            {cat === 'Level' && 'Tribe Level'}
                             {cat === 'Duration' && 'Live Duration'}
-                            {cat === 'Received' && 'Family Received'}
-                            {cat === 'Supported' && 'Family Supported'}
+                            {cat === 'Received' && 'Tribe Received'}
+                            {cat === 'Supported' && 'Tribe Supported'}
                             {cat === 'PK Wins' && 'PK Wins'}
                             
                             {/* Active Underline Indicator */}
@@ -1010,7 +1010,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                     <div className="flex-1 z-10 min-w-0">
                         <div className="font-bold text-sm text-white flex items-center gap-2">
                             {myRank.name}
-                            <span className="text-[10px] bg-[#A540FF] text-white px-1.5 rounded font-bold flex-shrink-0">My Family</span>
+                            <span className="text-[10px] bg-[#A540FF] text-white px-1.5 rounded font-bold flex-shrink-0">My Tribe</span>
                         </div>
                         {/* My Rank Details */}
                          <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-0.5">
@@ -1193,7 +1193,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                                 </div>
                                 <div className="relative">
                                     <img src={member.avatar} className="w-10 h-10 rounded-full bg-gray-700 object-cover border border-white/5" alt={member.name} />
-                                    {member.role === 'Family Chief' && (
+                                    {member.role === 'Tribe Chief' && (
                                         <div className="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full p-0.5 border border-[#1a1a1d]">
                                             <Crown className="w-2 h-2 text-black fill-black" />
                                         </div>
@@ -1287,7 +1287,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                     {/* Absolute Centered Title */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white flex items-center gap-2">
                         <ClipboardCheck className="w-5 h-5 text-[#A540FF]" />
-                        Family Tasks
+                        Tribe Tasks
                     </div>
                     
                     {/* Help Button */}
@@ -1378,7 +1378,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                     <div>
                         <h3 className="text-white font-bold mb-4 flex items-center gap-2">
                             <Users className="w-5 h-5 text-blue-500" />
-                            Family Goals
+                            Tribe Goals
                         </h3>
                         <div className="space-y-4">
                             {FAMILY_TASKS.map(task => {

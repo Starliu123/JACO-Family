@@ -253,7 +253,7 @@ const RoleAppointmentPage = ({ onBack }: any) => {
                 <section>
                     <div className="flex items-center gap-2 mb-4 px-2">
                         <Crown className="w-5 h-5 text-yellow-500" />
-                        <h3 className="text-white font-bold text-lg">Family Chief</h3>
+                        <h3 className="text-white font-bold text-lg">Tribe Chief</h3>
                     </div>
                     {/* Chief is always singular and present */}
                     <div className="flex justify-center">
@@ -294,7 +294,7 @@ const RoleAppointmentPage = ({ onBack }: any) => {
                         ))}
                     </div>
                     <div className="mt-3 text-[10px] text-gray-500 text-center bg-white/5 py-2 rounded-lg border border-white/5 border-dashed">
-                        Upgrade family to Lv.15 to set 4 admins
+                        Upgrade tribe to Lv.15 to set 4 admins
                     </div>
                 </section>
 
@@ -346,7 +346,7 @@ const RoleAppointmentPage = ({ onBack }: any) => {
 
                 {/* Bottom Hint - Styled to match Admin section */}
                 <div className="mt-6 text-[10px] text-gray-500 text-center bg-white/5 py-3 rounded-lg border border-white/5 border-dashed">
-                    Upgrade family to Lv.30 to customize role names
+                    Upgrade tribe to Lv.30 to customize role names
                 </div>
             </div>
 
@@ -488,7 +488,7 @@ const MemberListPage = ({ onBack }: any) => {
                         <span className="text-white font-bold text-sm">Invite New Member</span>
                     </button>
                     <p className="text-[10px] text-gray-500 text-center mt-2 font-medium">
-                        Upgrade family to Lv.15 to unlock member limit of 120
+                        Upgrade tribe to Lv.15 to unlock member limit of 120
                     </p>
                 </div>
             </div>
@@ -575,7 +575,7 @@ const MemberListPage = ({ onBack }: any) => {
                                     </div>
                                     <div className="text-left">
                                         <div className="text-sm font-bold text-red-500">Kick Out</div>
-                                        <div className="text-[10px] text-gray-500">Remove from family permanently</div>
+                                        <div className="text-[10px] text-gray-500">Remove from tribe permanently</div>
                                     </div>
                                 </div>
                                 <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white" />
@@ -638,10 +638,10 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
     // Render Sub-Pages Conditional Logic
     if (activeSubPage === 'name') {
         return <TextEditorPage 
-            title="Edit Family Name" 
+            title="Edit Tribe Name" 
             value={familyData.name} 
             maxLength={20}
-            placeholder="Enter family name"
+            placeholder="Enter tribe name"
             onBack={() => setActiveSubPage(null)} 
             onSave={(val: string) => handleSubPageSave('name', val)} 
         />;
@@ -653,7 +653,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
             value={familyData.slogan} 
             multiline 
             maxLength={100}
-            placeholder="Enter family slogan"
+            placeholder="Enter tribe slogan"
             onBack={() => setActiveSubPage(null)} 
             onSave={(val: string) => handleSubPageSave('slogan', val)} 
         />;
@@ -690,11 +690,11 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
     const generalSections = [
         {
             id: 'management',
-            title: "Family Information",
+            title: "Tribe Information",
             items: [
-                { id: 'name', page: 'name', icon: FilePenLine, label: 'Family Name', value: familyData.name, badge: '1 Rename Card' },
-                { id: 'slogan', page: 'slogan', icon: MessageSquareQuote, label: 'Family Slogan', value: familyData.slogan, truncate: true },
-                { id: 'avatar', page: 'avatar', icon: Camera, label: 'Family Avatar', value: '' },
+                { id: 'name', page: 'name', icon: FilePenLine, label: 'Tribe Name', value: familyData.name, badge: '1 Rename Card' },
+                { id: 'slogan', page: 'slogan', icon: MessageSquareQuote, label: 'Tribe Slogan', value: familyData.slogan, truncate: true },
+                { id: 'avatar', page: 'avatar', icon: Camera, label: 'Tribe Avatar', value: '' },
                 { id: 'cover', page: 'cover', icon: Image, label: 'Background Cover', value: 'Lv.5 Required' }, // Removed locked:true to allow demo
             ]
         },
@@ -711,7 +711,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
             id: 'tasks',
             title: "Task Configuration",
             items: [
-                { id: 'config', page: null, icon: ClipboardList, label: 'Family Tasks', value: '3 Active' },
+                { id: 'config', page: null, icon: ClipboardList, label: 'Tribe Tasks', value: '3 Active' },
             ]
         }
     ];
@@ -736,7 +736,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
     const renderInteractionSection = () => {
         return (
             <div className="mb-6 animate-in slide-in-from-bottom-2 duration-500 delay-300">
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-2">Family Interaction</h3>
+                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-2">Tribe Interaction</h3>
                 <div className="bg-[#1a1a1d] rounded-2xl overflow-hidden border border-white/5 shadow-sm divide-y divide-white/5">
                     
                     {/* 1. Group Chats */}
@@ -748,7 +748,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-sm font-medium text-white">Group Chats</span>
-                                    <span className="text-[10px] text-gray-500">Official family communication channels</span>
+                                    <span className="text-[10px] text-gray-500">Official tribe communication channels</span>
                                 </div>
                             </div>
                              <span className="text-xs text-gray-500 font-medium">
@@ -809,7 +809,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                              </button>
                         </div>
                         <p className="text-[11px] text-gray-500 mt-2 pl-11 leading-relaxed">
-                            Host a voice room exclusively for family members. Earn family EXP together.
+                            Host a voice room exclusively for tribe members. Earn tribe EXP together.
                         </p>
                     </div>
 
@@ -821,7 +821,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                                     <Gift className="w-4 h-4" />
                                 </div>
                                 <div>
-                                    <div className="text-sm font-medium text-white">Family Box</div>
+                                    <div className="text-sm font-medium text-white">Tribe Box</div>
                                 </div>
                              </div>
                              <button className="bg-[#A540FF] hover:bg-[#9333ea] text-white text-xs font-bold px-5 py-1.5 rounded-full transition-colors active:scale-95 shadow-lg shadow-purple-500/20">
@@ -915,7 +915,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                                 <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-500">
                                     <LogOut className="w-4 h-4" />
                                 </div>
-                                <span className="text-sm font-medium text-red-500">Leave Family</span>
+                                <span className="text-sm font-medium text-red-500">Leave Tribe</span>
                             </div>
                             <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-red-500 transition-colors" />
                         </button>
@@ -969,7 +969,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                  <div className="mt-4 text-[10px] text-gray-600 text-center px-4">
                      {demoRole === 'Chief' && "Full access. Can Transfer. Cannot Leave."}
                      {demoRole === 'Admin' && "Can Manage Members & Tasks. Cannot Disband/Transfer."}
-                     {demoRole === 'Member' && "Read-only access to most settings. Can Leave Family."}
+                     {demoRole === 'Member' && "Read-only access to most settings. Can Leave Tribe."}
                  </div>
              </div>
         </div>

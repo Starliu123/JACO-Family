@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MessageSquareText, ChevronDown, Flame, Trophy, Gem, Video, Users, Crown } from 'lucide-react';
+import { Search, MessageSquareText, ChevronDown, Flame, Trophy, Gem, Video, Users, Crown, ChevronRight } from 'lucide-react';
 import { Stream } from '../types';
 
 interface DiscoverViewProps {
@@ -9,28 +9,6 @@ interface DiscoverViewProps {
 }
 
 const CATEGORIES = ['All', 'Games', 'Music', 'Movie', 'Chat', 'Dance'];
-const FAMILY_RANKING_CATEGORIES = ['Level', 'Duration', 'Received', 'Supported', 'PK Wins'];
-
-const FEATURED_LIVES = [
-    {
-        id: 'd1',
-        rank: 1,
-        image: 'https://image.pollinations.ai/prompt/Cinematic%20soccer%20match%20stadium%20action%20shot%20dynamic%20lighting?width=400&height=500&seed=777&nologo=true',
-        title: 'Soccer Reality',
-        user: 'JohnNeo',
-        viewCount: '12.3K',
-        likeCount: '12.3K'
-    },
-    {
-        id: 'd2',
-        rank: 1,
-        image: 'https://image.pollinations.ai/prompt/Esports%20tournament%20stage%20blue%20neon%20lights%20crowd?width=400&height=500&seed=888&nologo=true',
-        title: 'Soccer Reality',
-        user: 'JohnNeo',
-        viewCount: '12.3K',
-        likeCount: '12.3K'
-    }
-];
 
 // Mock Data for Top 6 Families in various categories
 const FAMILY_NAMES = ["Royal Lions", "Golden Eagles", "Mystic Rose", "Thunder Squad", "Desert Storm", "Cyber Punks"];
@@ -68,11 +46,11 @@ const RANKING_DATA: Record<string, any[]> = {
 
 const TOP_STREAMERS = [
     { rank: 1, name: 'Ghost', gem: '****', avatar: 'https://image.pollinations.ai/prompt/Cool%20ghost%20mascot%20avatar%20green%20hoodie?width=100&height=100&seed=1&nologo=true' },
-    { rank: 2, name: 'Ghost', gem: '****', avatar: 'https://image.pollinations.ai/prompt/Cool%20ghost%20mascot%20avatar%20hoodie?width=100&height=100&seed=2&nologo=true' },
-    { rank: 3, name: 'Kristin Watson', gem: '1.5M', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20smiling%20professional?width=100&height=100&seed=3&nologo=true' },
-    { rank: 4, name: 'Ralph Edwards', gem: '781.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20man%20glasses%20handsome?width=100&height=100&seed=4&nologo=true' },
-    { rank: 5, name: 'Jenny Wilson', gem: '681.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20long%20hair?width=100&height=100&seed=5&nologo=true' },
-    { rank: 6, name: 'Darlene Robertson', gem: '281.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20blonde?width=100&height=100&seed=6&nologo=true' },
+    { rank: 2, name: 'Ahmed', gem: '****', avatar: 'https://image.pollinations.ai/prompt/Cool%20ghost%20mascot%20avatar%20hoodie?width=100&height=100&seed=2&nologo=true' },
+    { rank: 3, name: 'Kristin', gem: '1.5M', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20smiling%20professional?width=100&height=100&seed=3&nologo=true' },
+    { rank: 4, name: 'Ralph', gem: '781.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20man%20glasses%20handsome?width=100&height=100&seed=4&nologo=true' },
+    { rank: 5, name: 'Jenny', gem: '681.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20long%20hair?width=100&height=100&seed=5&nologo=true' },
+    { rank: 6, name: 'Darlene', gem: '281.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20blonde?width=100&height=100&seed=6&nologo=true' },
 ];
 
 export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamilyClick, onRankingsClick }) => {
@@ -123,133 +101,79 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamil
                     <div className="w-1.5 h-1.5 rounded-full bg-white/40"></div>
                 </div>
 
-                {/* Info Box - "Titanium Grey" Metallic Gradient */}
-                <div className="bg-gradient-to-r from-[#2e2e36]/95 to-[#1a1a1d]/95 backdrop-blur-xl rounded-xl p-4 flex items-center justify-between border border-white/10 shadow-lg">
+                {/* Info Box */}
+                <div className="bg-gradient-to-r from-gray-900/90 to-gray-800/90 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center justify-between">
                     <div>
-                        <h2 className="text-lg font-bold text-white leading-tight">Carnival Activity</h2>
-                        <p className="text-xs text-gray-400 mt-1">Win the Jaco Era Prize</p>
+                        <div className="text-[10px] text-yellow-500 font-bold uppercase tracking-widest mb-1 flex items-center gap-1">
+                            <Flame className="w-3 h-3" /> Hot Event
+                        </div>
+                        <h2 className="text-lg font-bold text-white leading-tight">Carnival Gala Night</h2>
+                        <p className="text-[10px] text-gray-400 mt-1">Join the biggest party of the year!</p>
                     </div>
-                    <button className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-5 py-2 rounded-lg transition-colors border border-white/10 shadow-sm">
-                        View
+                    <button className="bg-white text-black text-xs font-bold px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors">
+                        Join
                     </button>
                 </div>
             </div>
         </div>
 
-        {/* 3. Hourly Ranking & Featured Lives Module - "Deep Steel Blue" Gradient */}
-        <div className="bg-gradient-to-br from-[#232530] via-[#1a1b23] to-[#101012] rounded-2xl border border-white/5 p-4 space-y-4 shadow-xl">
-            {/* Module Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h3 className="text-base font-bold text-white">Hourly Ranking</h3>
-                    <p className="text-xs text-gray-400 mt-1">Explore the popular LIVEs in Jaco</p>
-                </div>
-                <button className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-5 py-2 rounded-lg transition-colors border border-white/10 shadow-sm">
-                    View
-                </button>
+        {/* 3. Top Streamers (Horizontal Scroll) */}
+        <div>
+            <div className="flex items-center justify-between mb-3 px-1">
+                <h3 className="font-bold text-white flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-yellow-500" />
+                    Top Streamers
+                </h3>
+                <span className="text-xs text-gray-500">View All</span>
             </div>
-
-            {/* Category Tabs */}
-            <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                {CATEGORIES.map((cat, idx) => (
-                    <button 
-                        key={cat} 
-                        className={`px-4 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                            idx === 0 
-                                ? 'bg-white/10 text-white border border-white/10 shadow-sm' 
-                                : 'bg-[#1e1e22] text-gray-500 border border-transparent hover:text-gray-300'
-                        }`}
-                    >
-                        {cat}
-                    </button>
-                ))}
-            </div>
-
-            {/* Featured Lives Grid */}
-            <div className="grid grid-cols-2 gap-3">
-                {FEATURED_LIVES.map((item, idx) => (
-                    <div 
-                        key={idx} 
-                        className="relative rounded-xl overflow-hidden aspect-[3/4] group cursor-pointer bg-black/40 shadow-lg border border-white/5"
-                        onClick={() => onLiveClick({
-                            id: item.id,
-                            thumbnail: item.image,
-                            title: item.title,
-                            user: { id: 'u'+idx, name: item.user, avatar: '', verified: true },
-                            viewCount: item.viewCount,
-                            likeCount: item.likeCount,
-                            tags: []
-                        })}
-                    >
-                        <img src={item.image} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={item.title} />
-                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
-                        
-                        {/* Top Left Badge */}
-                        <div className="absolute top-2 left-2 flex items-center gap-1">
-                            <div className="bg-yellow-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5 shadow-md">
-                                <Flame className="w-2.5 h-2.5 fill-black" /> 1
-                            </div>
-                            <div className="bg-black/40 backdrop-blur-sm p-1 rounded">
-                                <img src="https://img.jacocdn.com/large/3b9ae203la1i8yo75jeqnj202f00k3yb.jpg" className="w-3 h-3 object-contain" alt="chest" />
+            <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+                {TOP_STREAMERS.map((streamer) => (
+                    <div key={streamer.rank} className="flex flex-col items-center min-w-[70px]">
+                        <div className="relative">
+                            <img 
+                                src={streamer.avatar} 
+                                className={`w-14 h-14 rounded-full object-cover border-2 ${streamer.rank <= 3 ? 'border-yellow-500' : 'border-white/10'}`} 
+                                alt={streamer.name} 
+                            />
+                            <div className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold border border-[#0f0f11] ${
+                                streamer.rank === 1 ? 'bg-yellow-500 text-black' :
+                                streamer.rank === 2 ? 'bg-gray-300 text-black' :
+                                streamer.rank === 3 ? 'bg-orange-600 text-white' :
+                                'bg-gray-700 text-gray-400'
+                            }`}>
+                                {streamer.rank}
                             </div>
                         </div>
-
-                        {/* Mute Icon */}
-                        <div className="absolute top-2 right-2 bg-black/40 backdrop-blur-sm p-1 rounded-full">
-                            <Video className="w-3 h-3 text-white" />
-                        </div>
-
-                        {/* Bottom Info */}
-                        <div className="absolute bottom-0 left-0 w-full p-2.5">
-                            <div className="flex items-center gap-1 mb-1">
-                                <span className="text-xs font-bold text-white truncate">{item.user}</span>
-                                <div className="bg-[#A540FF] rounded-full p-[1px]">
-                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="text-white"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                </div>
-                            </div>
-                            <div className="text-[10px] text-gray-400 mb-1.5">{item.title}</div>
-                            <div className="flex items-center gap-2 text-[10px] text-gray-500 bg-white/5 w-fit px-1.5 py-0.5 rounded">
-                                <span className="flex items-center gap-0.5">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                    {item.likeCount}
-                                </span>
-                                <span className="flex items-center gap-0.5">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    {item.viewCount}
-                                </span>
-                            </div>
-                        </div>
+                        <div className="text-[10px] font-bold text-white mt-2 truncate w-full text-center">{streamer.name}</div>
+                        <div className="text-[9px] text-[#A540FF] font-medium">{streamer.gem}</div>
                     </div>
                 ))}
             </div>
         </div>
 
-        {/* 4. Family Ranking Module - "Deep Emerald Green" Gradient */}
-        <div className="bg-gradient-to-br from-[#0c2e1e] via-[#081f14] to-[#04120a] rounded-2xl border border-white/5 p-4 space-y-4 shadow-xl">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h3 className="text-base font-bold text-white">Family Ranking</h3>
-                    <p className="text-xs text-gray-400 mt-1">Top Communities</p>
-                </div>
-                 <button 
-                    onClick={onRankingsClick}
-                    className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-5 py-2 rounded-lg transition-colors border border-white/10 shadow-sm"
-                 >
-                    View
-                </button>
+        {/* 4. Tribe Rankings */}
+        <div>
+            <div 
+                className="flex items-center justify-between mb-3 px-1 cursor-pointer"
+                onClick={onRankingsClick}
+            >
+                <h3 className="font-bold text-white flex items-center gap-2">
+                    <Trophy className="w-5 h-5 text-[#A540FF]" />
+                    Tribe Ranking
+                </h3>
+                <ChevronRight className="w-4 h-4 text-gray-500" />
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                {FAMILY_RANKING_CATEGORIES.map((cat) => (
-                    <button 
-                        key={cat} 
+            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar mb-4">
+                {['Level', 'Received', 'Supported', 'PK Wins'].map(cat => (
+                    <button
+                        key={cat}
                         onClick={() => setActiveFamilyTab(cat)}
-                        className={`px-4 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors border ${
                             activeFamilyTab === cat 
-                                ? 'bg-white/10 text-white border border-white/10 shadow-sm' 
-                                : 'bg-[#0f1f15] text-emerald-100/60 border border-transparent hover:text-emerald-100'
+                            ? 'bg-[#A540FF]/20 border-[#A540FF] text-[#A540FF]' 
+                            : 'bg-white/5 border-transparent text-gray-400 hover:bg-white/10'
                         }`}
                     >
                         {cat}
@@ -258,77 +182,30 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamil
             </div>
 
             {/* List */}
-             <div className="rounded-xl overflow-hidden bg-black/20 border border-white/5">
-                {currentFamilyData.map((family, idx) => (
+            <div className="space-y-2">
+                {currentFamilyData.slice(0, 5).map((family) => (
                     <div 
-                        key={idx} 
-                        className="flex items-center justify-between p-3 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors cursor-pointer group"
+                        key={family.rank} 
                         onClick={onFamilyClick}
+                        className="flex items-center p-3 bg-[#1a1a1d] rounded-xl border border-white/5 active:scale-[0.99] transition-transform cursor-pointer"
                     >
-                        <div className="flex items-center gap-3">
-                             <span className={`text-sm font-bold w-4 text-center ${
-                                family.rank === 1 ? 'text-yellow-500' : 
-                                family.rank === 2 ? 'text-gray-300' : 
-                                family.rank === 3 ? 'text-orange-400' : 'text-gray-500'
-                            }`}>
-                                {family.rank}
-                            </span>
-                            <div className="relative">
-                                <img src={family.avatar} className="w-10 h-10 rounded-xl object-cover" alt={family.name} />
-                                 {family.rank === 1 && (
-                                    <div className="absolute -top-1.5 -right-1.5 bg-yellow-500 rounded-full p-0.5 border border-[#1a1a1d]">
-                                        <Crown className="w-2 h-2 text-black fill-black" />
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                 <div className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">{family.name}</div>
-                                 <div className="flex items-center gap-1 text-[10px] text-gray-400 mt-0.5">
-                                    <Users className="w-3 h-3" /> {family.members} Members
-                                 </div>
+                        <div className={`w-6 font-bold text-center text-sm ${
+                            family.rank === 1 ? 'text-yellow-500' :
+                            family.rank === 2 ? 'text-gray-300' :
+                            family.rank === 3 ? 'text-orange-500' : 'text-gray-600'
+                        }`}>
+                            {family.rank}
+                        </div>
+                        <img src={family.avatar} className="w-10 h-10 rounded-lg object-cover mx-3" alt={family.name} />
+                        <div className="flex-1 min-w-0">
+                            <div className="text-sm font-bold text-white truncate">{family.name}</div>
+                            <div className="text-[10px] text-gray-500 flex items-center gap-1">
+                                <Users className="w-3 h-3" /> {family.members} Members
                             </div>
                         </div>
                         <div className="text-right">
-                             <div className="text-[10px] text-gray-500 mb-0.5">{family.scoreLabel}</div>
-                             <div className="text-sm font-bold text-emerald-400">{family.score}</div>
-                        </div>
-                    </div>
-                ))}
-             </div>
-        </div>
-
-        {/* 5. Top Streamers Module - "Dark Velvet Purple" Gradient */}
-        <div className="bg-gradient-to-br from-[#2a2430] via-[#1f1a24] to-[#121014] rounded-2xl border border-white/5 p-4 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-bold text-white">Top Streamers</h3>
-                <Gem className="w-8 h-8 text-pink-500 opacity-80" />
-            </div>
-
-            <div className="rounded-xl overflow-hidden bg-black/20 border border-white/5">
-                {TOP_STREAMERS.map((streamer, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
-                        <div className="flex items-center gap-4">
-                            <span className={`text-sm font-bold w-4 text-center ${
-                                streamer.rank === 1 ? 'text-yellow-500' : 
-                                streamer.rank === 2 ? 'text-gray-300' : 
-                                streamer.rank === 3 ? 'text-orange-400' : 'text-gray-500'
-                            }`}>
-                                {streamer.rank}
-                            </span>
-                            <div className="relative">
-                                <img src={streamer.avatar} className="w-10 h-10 rounded-full object-cover" alt={streamer.name} />
-                                {streamer.rank === 1 && (
-                                    <div className="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full p-0.5 border border-[#1a1a1d]">
-                                        <Trophy className="w-2 h-2 text-black fill-black" />
-                                    </div>
-                                )}
-                            </div>
-                            <span className="text-sm font-bold text-white">{streamer.name}</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-1.5">
-                            <Gem className="w-3.5 h-3.5 text-pink-500 fill-pink-500" />
-                            <span className="text-xs font-medium text-gray-300">{streamer.gem}</span>
+                            <div className="text-xs font-bold text-[#A540FF]">{family.score}</div>
+                            <div className="text-[9px] text-gray-500">{family.scoreLabel}</div>
                         </div>
                     </div>
                 ))}
