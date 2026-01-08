@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MessageSquareText, ChevronDown, Flame, Trophy, Gem, Video, Users, Crown, ChevronRight } from 'lucide-react';
+import { Search, MessageSquareText, ChevronDown, Flame, Trophy, Users, Crown, ChevronRight } from 'lucide-react';
 import { Stream } from '../types';
 
 interface DiscoverViewProps {
@@ -8,10 +8,8 @@ interface DiscoverViewProps {
   onRankingsClick?: () => void;
 }
 
-const CATEGORIES = ['All', 'Games', 'Music', 'Movie', 'Chat', 'Dance'];
-
-// Mock Data for Top 6 Families in various categories
-const FAMILY_NAMES = ["Royal Lions", "Golden Eagles", "Mystic Rose", "Thunder Squad", "Desert Storm", "Cyber Punks"];
+// Mock Data for Top 6 Tribes
+const TRIBE_NAMES = ["Royal Lions", "Golden Eagles", "Mystic Rose", "Thunder Squad", "Desert Storm", "Cyber Punks"];
 const AVATARS = [
     'https://image.pollinations.ai/prompt/Esports%20team%20logo%20shield%20purple%20lion?width=100&height=100&seed=45&nologo=true',
     'https://image.pollinations.ai/prompt/Golden%20eagle%20logo?width=100&height=100&seed=46&nologo=true',
@@ -22,36 +20,27 @@ const AVATARS = [
 ];
 
 const RANKING_DATA: Record<string, any[]> = {
-    'Level': FAMILY_NAMES.map((name, i) => ({
+    'Level': TRIBE_NAMES.map((name, i) => ({
         rank: i + 1, name, avatar: AVATARS[i], members: 150 - i * 10,
         score: `Lv.${14 - i}`, scoreLabel: 'Level'
     })),
-    'Duration': FAMILY_NAMES.map((name, i) => ({
+    'Duration': TRIBE_NAMES.map((name, i) => ({
         rank: i + 1, name, avatar: AVATARS[i], members: 150 - i * 10,
-        score: `${(300 - i * 40)}h`, scoreLabel: 'Hours'
+        score: `${(300 - i * 40)}h`, scoreLabel: 'Duration'
     })),
-    'Received': FAMILY_NAMES.map((name, i) => ({
+    'Received': TRIBE_NAMES.map((name, i) => ({
         rank: i + 1, name, avatar: AVATARS[i], members: 150 - i * 10,
-        score: `${(5.5 - i * 0.8).toFixed(1)}M`, scoreLabel: 'Diamonds'
+        score: `${(5.5 - i * 0.8).toFixed(1)}M`, scoreLabel: 'Received'
     })),
-    'Supported': FAMILY_NAMES.map((name, i) => ({
+    'Supported': TRIBE_NAMES.map((name, i) => ({
         rank: i + 1, name, avatar: AVATARS[i], members: 150 - i * 10,
-        score: `${(8.2 - i * 1.2).toFixed(1)}M`, scoreLabel: 'Coins'
+        score: `${(8.2 - i * 1.2).toFixed(1)}M`, scoreLabel: 'Supported'
     })),
-    'PK Wins': FAMILY_NAMES.map((name, i) => ({
+    'PK Wins': TRIBE_NAMES.map((name, i) => ({
         rank: i + 1, name, avatar: AVATARS[i], members: 150 - i * 10,
-        score: `${100 - i * 15} Wins`, scoreLabel: 'Wins'
+        score: `${100 - i * 15}`, scoreLabel: 'Wins'
     })),
 };
-
-const TOP_STREAMERS = [
-    { rank: 1, name: 'Ghost', gem: '****', avatar: 'https://image.pollinations.ai/prompt/Cool%20ghost%20mascot%20avatar%20green%20hoodie?width=100&height=100&seed=1&nologo=true' },
-    { rank: 2, name: 'Ahmed', gem: '****', avatar: 'https://image.pollinations.ai/prompt/Cool%20ghost%20mascot%20avatar%20hoodie?width=100&height=100&seed=2&nologo=true' },
-    { rank: 3, name: 'Kristin', gem: '1.5M', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20smiling%20professional?width=100&height=100&seed=3&nologo=true' },
-    { rank: 4, name: 'Ralph', gem: '781.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20man%20glasses%20handsome?width=100&height=100&seed=4&nologo=true' },
-    { rank: 5, name: 'Jenny', gem: '681.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20long%20hair?width=100&height=100&seed=5&nologo=true' },
-    { rank: 6, name: 'Darlene', gem: '281.2K', avatar: 'https://image.pollinations.ai/prompt/Portrait%20woman%20blonde?width=100&height=100&seed=6&nologo=true' },
-];
 
 export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamilyClick, onRankingsClick }) => {
   const [activeFamilyTab, setActiveFamilyTab] = useState('Level');
@@ -117,63 +106,38 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamil
             </div>
         </div>
 
-        {/* 3. Top Streamers (Horizontal Scroll) */}
-        <div>
-            <div className="flex items-center justify-between mb-3 px-1">
-                <h3 className="font-bold text-white flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-yellow-500" />
-                    Top Streamers
-                </h3>
-                <span className="text-xs text-gray-500">View All</span>
-            </div>
-            <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-                {TOP_STREAMERS.map((streamer) => (
-                    <div key={streamer.rank} className="flex flex-col items-center min-w-[70px]">
-                        <div className="relative">
-                            <img 
-                                src={streamer.avatar} 
-                                className={`w-14 h-14 rounded-full object-cover border-2 ${streamer.rank <= 3 ? 'border-yellow-500' : 'border-white/10'}`} 
-                                alt={streamer.name} 
-                            />
-                            <div className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold border border-[#0f0f11] ${
-                                streamer.rank === 1 ? 'bg-yellow-500 text-black' :
-                                streamer.rank === 2 ? 'bg-gray-300 text-black' :
-                                streamer.rank === 3 ? 'bg-orange-600 text-white' :
-                                'bg-gray-700 text-gray-400'
-                            }`}>
-                                {streamer.rank}
-                            </div>
-                        </div>
-                        <div className="text-[10px] font-bold text-white mt-2 truncate w-full text-center">{streamer.name}</div>
-                        <div className="text-[9px] text-[#A540FF] font-medium">{streamer.gem}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
+        {/* 3. Tribe Rankings Module - Wrapped in Green Gradient Card */}
+        <div className="bg-gradient-to-b from-[#022c22] to-[#064e3b] rounded-3xl p-5 border border-[#10b981]/20 shadow-xl relative overflow-hidden">
+            
+            {/* Background Texture Effect */}
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#10b981]/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
 
-        {/* 4. Tribe Rankings */}
-        <div>
-            <div 
-                className="flex items-center justify-between mb-3 px-1 cursor-pointer"
-                onClick={onRankingsClick}
-            >
-                <h3 className="font-bold text-white flex items-center gap-2">
-                    <Trophy className="w-5 h-5 text-[#A540FF]" />
-                    Tribe Ranking
-                </h3>
-                <ChevronRight className="w-4 h-4 text-gray-500" />
+            {/* Header */}
+            <div className="flex items-center justify-between mb-5 relative z-10">
+                <div className="flex flex-col">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                        Tribe Ranking
+                    </h3>
+                    <p className="text-[10px] text-emerald-200/60 font-medium">Top Communities</p>
+                </div>
+                <button 
+                    onClick={onRankingsClick}
+                    className="bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-lg text-xs font-bold transition-colors border border-white/10 text-white"
+                >
+                    View
+                </button>
             </div>
 
-            {/* Tabs */}
-            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar mb-4">
-                {['Level', 'Received', 'Supported', 'PK Wins'].map(cat => (
+            {/* Tabs - Integrated style */}
+            <div className="flex items-center justify-between bg-black/20 p-1 rounded-xl mb-4 relative z-10 overflow-x-auto no-scrollbar">
+                {['Level', 'Duration', 'Received', 'Supported'].map(cat => (
                     <button
                         key={cat}
                         onClick={() => setActiveFamilyTab(cat)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors border ${
+                        className={`flex-1 py-2 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all ${
                             activeFamilyTab === cat 
-                            ? 'bg-[#A540FF]/20 border-[#A540FF] text-[#A540FF]' 
-                            : 'bg-white/5 border-transparent text-gray-400 hover:bg-white/10'
+                            ? 'bg-[#10b981] text-white shadow-md' 
+                            : 'text-emerald-100/60 hover:text-white hover:bg-white/5'
                         }`}
                     >
                         {cat}
@@ -181,31 +145,51 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({ onLiveClick, onFamil
                 ))}
             </div>
 
-            {/* List */}
-            <div className="space-y-2">
-                {currentFamilyData.slice(0, 5).map((family) => (
+            {/* List - Simple Rows */}
+            <div className="space-y-1 relative z-10">
+                {currentFamilyData.slice(0, 6).map((tribe, index) => (
                     <div 
-                        key={family.rank} 
+                        key={tribe.rank} 
                         onClick={onFamilyClick}
-                        className="flex items-center p-3 bg-[#1a1a1d] rounded-xl border border-white/5 active:scale-[0.99] transition-transform cursor-pointer"
+                        className="flex items-center py-3 border-b border-white/5 last:border-0 active:opacity-70 transition-opacity cursor-pointer"
                     >
+                        {/* Rank */}
                         <div className={`w-6 font-bold text-center text-sm ${
-                            family.rank === 1 ? 'text-yellow-500' :
-                            family.rank === 2 ? 'text-gray-300' :
-                            family.rank === 3 ? 'text-orange-500' : 'text-gray-600'
+                            tribe.rank === 1 ? 'text-[#fbbf24]' : 
+                            tribe.rank === 2 ? 'text-gray-300' :
+                            tribe.rank === 3 ? 'text-orange-400' :
+                            'text-emerald-100/60'
                         }`}>
-                            {family.rank}
+                            {tribe.rank}
                         </div>
-                        <img src={family.avatar} className="w-10 h-10 rounded-lg object-cover mx-3" alt={family.name} />
+
+                        {/* Avatar */}
+                        <div className="relative mx-3">
+                            <img src={tribe.avatar} className="w-10 h-10 rounded-xl object-cover bg-black/20" alt={tribe.name} />
+                            {tribe.rank === 1 && (
+                                <div className="absolute -top-1.5 -right-1.5 bg-[#fbbf24] rounded-full p-0.5 border border-[#022c22]">
+                                    <Crown className="w-2.5 h-2.5 text-black fill-black" />
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Info */}
                         <div className="flex-1 min-w-0">
-                            <div className="text-sm font-bold text-white truncate">{family.name}</div>
-                            <div className="text-[10px] text-gray-500 flex items-center gap-1">
-                                <Users className="w-3 h-3" /> {family.members} Members
+                            <div className="text-sm font-bold text-white truncate">{tribe.name}</div>
+                            <div className="text-[10px] text-emerald-100/50 flex items-center gap-1 font-medium">
+                                <Users className="w-3 h-3" /> {tribe.members} Members
                             </div>
                         </div>
+
+                        {/* Score */}
                         <div className="text-right">
-                            <div className="text-xs font-bold text-[#A540FF]">{family.score}</div>
-                            <div className="text-[9px] text-gray-500">{family.scoreLabel}</div>
+                            <div className="text-[9px] text-emerald-100/40 font-medium uppercase tracking-wide mb-0.5">{tribe.scoreLabel}</div>
+                            <div className={`text-sm font-bold ${
+                                activeFamilyTab === 'Level' ? 'text-[#34d399]' : 
+                                'text-white'
+                            }`}>
+                                {tribe.score}
+                            </div>
                         </div>
                     </div>
                 ))}
