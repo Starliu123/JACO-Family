@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { 
   ChevronLeft, Users, Shield, Trophy, Star, Crown, Share2, CircleHelp, Coins, FilePenLine, UserPlus, Medal, ChevronDown,
-  Home, ClipboardCheck, BarChart3, Calendar, Settings, Gift, Clock, PlayCircle, CheckCircle2, Zap, Check, X, Gem, Video, MoreHorizontal, Swords, Flame, HeartHandshake, Mic2, Sparkles, Gamepad2, ChevronRight, History, TrendingUp, MessageCircle
+  Home, ClipboardCheck, BarChart3, Calendar, Settings, Gift, Clock, PlayCircle, CheckCircle2, Zap, Check, X, Gem, Video, MoreHorizontal, Swords, Flame, HeartHandshake, Mic2, Sparkles, Gamepad2, ChevronRight, History, TrendingUp, MessageCircle, Skull
 } from 'lucide-react';
 import { FamilyManage } from './family/FamilyManage';
 
@@ -10,7 +10,7 @@ interface FamilyViewProps {
   initialTab?: FamilyTabType;
 }
 
-type FilterType = 'Total' | 'Month' | 'Week';
+type FilterType = 'Season' | 'Total';
 export type FamilyTabType = 'home' | 'tasks' | 'rankings' | 'events' | 'manage';
 type TaskStatus = 'go' | 'claim' | 'done';
 // Updated Categories: Added Supported, Renamed Gifting to Received
@@ -65,10 +65,9 @@ interface HistoryItem {
 // Role definitions for styling
 const ROLE_STYLES: Record<string, string> = {
   'Tribe Chief': 'bg-gradient-to-r from-yellow-600 to-amber-500 text-white border-none',
-  'Admin': 'bg-purple-500/20 text-purple-400 border border-purple-500/20',
-  'Streamer': 'bg-pink-500/20 text-pink-400 border border-pink-500/20',
-  'Supporter': 'bg-blue-500/20 text-blue-400 border border-blue-500/20',
-  'Speaker': 'bg-green-500/20 text-green-400 border border-green-500/20',
+  'The Arif': 'bg-purple-500/20 text-purple-400 border border-purple-500/20',
+  'Fazaa Knights': 'bg-pink-500/20 text-pink-400 border border-pink-500/20',
+  'The Wajeeh': 'bg-blue-500/20 text-blue-400 border border-blue-500/20',
   'Member': 'bg-gray-700/50 text-gray-400 border border-white/5',
 };
 
@@ -139,7 +138,7 @@ const INITIAL_MY_TASKS: Task[] = [
     { 
         id: 2, 
         icon: Clock, 
-        color: "text-blue-400",
+        color: "text-blue-400", 
         title: "Watch Live Stream", 
         desc: "Join LIVE and watch for 10 mins",
         rewards: [
@@ -516,7 +515,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
   const [showHistory, setShowHistory] = useState(false); // New state for history page
   const [isManageSubPageOpen, setIsManageSubPageOpen] = useState(false);
   
-  const [filter, setFilter] = useState<FilterType>('Total');
+  const [filter, setFilter] = useState<FilterType>('Season');
   const [visibleCount, setVisibleCount] = useState(20);
   
   // Rankings State
@@ -524,6 +523,11 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
   const [rankingTimeFilter, setRankingTimeFilter] = useState<TimeFilter>('Daily');
   // Timer State for Refresh
   const [timeLeft, setTimeLeft] = useState(19 * 3600 + 29 * 60 + 32); // Initial seconds
+
+  // Archenemy State
+  const [rivalTribe, setRivalTribe] = useState<{name: string, avatar: string, level: number} | null>(null);
+  const [duelEndTime, setDuelEndTime] = useState<Date | null>(null);
+  const [duelTimeLeft, setDuelTimeLeft] = useState<string>("");
 
   useEffect(() => {
     // Only run timer if not in Level tab
@@ -534,6 +538,29 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
         return () => clearInterval(timer);
     }
   }, [activeTab, rankingCategory]);
+
+  // Effect to handle duel countdown
+  useEffect(() => {
+    if (!duelEndTime) return;
+
+    const timer = setInterval(() => {
+        const now = new Date();
+        const diff = duelEndTime.getTime() - now.getTime();
+
+        if (diff <= 0) {
+            setDuelTimeLeft("00:00:00");
+            clearInterval(timer);
+            // Optionally handle duel end logic here
+        } else {
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            setDuelTimeLeft(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`);
+        }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [duelEndTime]);
 
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
@@ -627,17 +654,31 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
       }, 2000);
   };
 
+  const handleSetRival = () => {
+      setRivalTribe({
+          name: "Crimson Tide",
+          avatar: "https://image.pollinations.ai/prompt/Aggressive%20red%20shark%20logo%20mascot%20esports?width=100&height=100&seed=666&nologo=true",
+          level: 15
+      });
+      // Set timer to 48 hours from now
+      const end = new Date();
+      end.setHours(end.getHours() + 48);
+      setDuelEndTime(end);
+      setDuelTimeLeft("47:59:59"); // Initial value to avoid delay
+  };
+
   // Generate extended mock data
   const allMembers = useMemo(() => {
-    const roles = ['Member', 'Streamer', 'Supporter', 'Speaker', 'Admin'];
+    // UPDATED ROLES HERE: Replacing Admin, Streamer, Supporter with new names
+    const roles = ['Member', 'The Arif', 'Fazaa Knights', 'The Wajeeh'];
     const baseMembers = [
-      { id: 1, name: "Ahmed_Live", role: "Tribe Chief", contributionTotal: "1.2M", contributionMonth: "300K", contributionWeek: "50K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
-      { id: 2, name: "Desert_King", role: "Admin", contributionTotal: "850K", contributionMonth: "210K", contributionWeek: "45K", avatar: "https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true" },
-      { id: 3, name: "Sarah_Gamer", role: "Admin", contributionTotal: "720K", contributionMonth: "180K", contributionWeek: "40K", avatar: "https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true" },
-      { id: 4, name: "Falcon_Eye", role: "Streamer", contributionTotal: "450K", contributionMonth: "120K", contributionWeek: "30K", avatar: "https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true" },
-      { id: 5, name: "Riyadh_Drift", role: "Supporter", contributionTotal: "300K", contributionMonth: "90K", contributionWeek: "25K", avatar: "https://image.pollinations.ai/prompt/Race%20car%20driver?width=100&height=100&seed=55&nologo=true" },
-      { id: 6, name: "Coffee_Lover", role: "Speaker", contributionTotal: "280K", contributionMonth: "85K", contributionWeek: "20K", avatar: "https://image.pollinations.ai/prompt/Arab%20coffee%20dallah?width=100&height=100&seed=66&nologo=true" },
-      { id: 7, name: "Night_Owl", role: "Member", contributionTotal: "150K", contributionMonth: "50K", contributionWeek: "10K", avatar: "https://image.pollinations.ai/prompt/Owl%20neon?width=100&height=100&seed=77&nologo=true" },
+      { id: 1, name: "Ahmed_Live", role: "Tribe Chief", contributionTotal: "1.2M", contributionSeason: "300K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
+      { id: 2, name: "Desert_King", role: "The Arif", contributionTotal: "850K", contributionSeason: "210K", avatar: "https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true" },
+      { id: 3, name: "Sarah_Gamer", role: "The Arif", contributionTotal: "720K", contributionSeason: "180K", avatar: "https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true" },
+      { id: 4, name: "Falcon_Eye", role: "Fazaa Knights", contributionTotal: "450K", contributionSeason: "120K", avatar: "https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true" },
+      { id: 5, name: "Riyadh_Drift", role: "The Wajeeh", contributionTotal: "300K", contributionSeason: "90K", avatar: "https://image.pollinations.ai/prompt/Race%20car%20driver?width=100&height=100&seed=55&nologo=true" },
+      { id: 6, name: "Coffee_Lover", role: "Fazaa Knights", contributionTotal: "280K", contributionSeason: "85K", avatar: "https://image.pollinations.ai/prompt/Arab%20coffee%20dallah?width=100&height=100&seed=66&nologo=true" },
+      { id: 7, name: "Night_Owl", role: "Member", contributionTotal: "150K", contributionSeason: "50K", avatar: "https://image.pollinations.ai/prompt/Owl%20neon?width=100&height=100&seed=77&nologo=true" },
     ];
 
     // Generate remaining members to reach 60
@@ -650,8 +691,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
         name: `User_${id}`,
         role,
         contributionTotal: `${total}K`,
-        contributionMonth: `${(total * 0.3).toFixed(1)}K`,
-        contributionWeek: `${(total * 0.05).toFixed(1)}K`,
+        contributionSeason: `${(total * 0.3).toFixed(1)}K`,
         avatar: `https://image.pollinations.ai/prompt/Arab%20avatar%20portrait%20illustration?width=100&height=100&seed=${id + 200}&nologo=true`
       };
     });
@@ -668,8 +708,7 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
 
   const getContributionDisplay = (member: any) => {
     switch (filter) {
-      case 'Month': return member.contributionMonth;
-      case 'Week': return member.contributionWeek;
+      case 'Season': return member.contributionSeason;
       default: return member.contributionTotal;
     }
   };
@@ -744,14 +783,15 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                      )}
                 </div>
             </div>
-            
+
+            {/* --- Level Up Unlocks (Moved Up) --- */}
             {/* Unlock Text */}
-            <div className="relative text-[11px] text-center text-gray-300 mb-5 font-medium drop-shadow-sm">
+            <div className="relative text-[11px] text-center text-gray-300 mb-3 font-medium drop-shadow-sm mt-3">
                 <span className="text-white font-bold">{(MAX_EXP - familyExp).toLocaleString()} Exp</span> to <span className="text-yellow-500 font-bold">Lv 15</span>. And unlock:
             </div>
 
             {/* Unlockables Grid - REALISTIC 3D ICONS */}
-            <div className="relative grid grid-cols-4 gap-2">
+            <div className="relative grid grid-cols-4 gap-2 mb-4">
                 {/* Badge - 3D Gold Shield */}
                 <div className="flex flex-col items-center gap-2">
                     <div className="w-12 h-12 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-center shadow-inner backdrop-blur-sm overflow-hidden p-2">
@@ -800,6 +840,73 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                     <span className="text-[9px] text-gray-300 font-medium text-center leading-tight">Limit Up</span>
                 </div>
             </div>
+
+            {/* --- Archenemy / Rival Section (Moved Down) --- */}
+            <div 
+                className="relative pt-3 border-t border-white/10"
+                onClick={(e) => e.stopPropagation()} // Prevent navigation to history when clicking controls
+            >
+                <div className="flex justify-between items-center mb-2">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                        <Swords className="w-3 h-3 text-red-500" /> My Archenemy
+                    </span>
+                    {rivalTribe && (
+                         <span className="text-[9px] font-bold text-yellow-500 flex items-center gap-1 animate-pulse">
+                            <Clock className="w-2.5 h-2.5" /> Battle in {duelTimeLeft} • Win +2000 EXP
+                        </span>
+                    )}
+                    {!rivalTribe && (
+                         <span className="text-[9px] font-bold text-gray-500">
+                            Set rival to earn bonus EXP
+                        </span>
+                    )}
+                </div>
+
+                {!rivalTribe ? (
+                    // Empty State: Set Rival
+                    <button 
+                        onClick={handleSetRival}
+                        className="w-full h-12 rounded-xl border border-dashed border-white/20 hover:border-[#A540FF]/50 bg-white/5 hover:bg-[#A540FF]/10 flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-all group/btn"
+                    >
+                        <Skull className="w-4 h-4 text-gray-500 group-hover/btn:text-[#A540FF]" />
+                        <span className="text-xs font-bold">Set Rival Tribe</span>
+                    </button>
+                ) : (
+                    // Active State: VS Display
+                    <div className="w-full bg-gradient-to-r from-black/40 to-red-900/20 rounded-xl p-2 border border-white/10 flex items-center justify-between relative overflow-hidden">
+                        {/* My Side */}
+                        <div className="flex items-center gap-2 relative z-10 pl-1">
+                            <img src={FAMILY_AVATAR} className="w-8 h-8 rounded-full border border-[#A540FF]" alt="Me" />
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-bold text-white leading-tight">My Tribe</span>
+                                <span className="text-[8px] text-gray-400">Lv 14</span>
+                            </div>
+                        </div>
+
+                        {/* VS Badge */}
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+                            <div className="bg-red-600 text-white text-[10px] font-black italic px-1.5 rounded transform -skew-x-12 shadow-lg border border-white/20">
+                                VS
+                            </div>
+                        </div>
+
+                        {/* Rival Side */}
+                        <div className="flex items-center gap-2 flex-row-reverse relative z-10 pr-1 text-right">
+                            <div className="relative">
+                                <img src={rivalTribe.avatar} className="w-8 h-8 rounded-full border border-red-500 grayscale-[30%]" alt="Rival" />
+                                <div className="absolute -top-1 -right-1 bg-red-600 rounded-full p-[2px]">
+                                    <Skull className="w-2 h-2 text-white" />
+                                </div>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-bold text-red-200 leading-tight">{rivalTribe.name}</span>
+                                <span className="text-[8px] text-red-400/70">Lv {rivalTribe.level}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            
         </div>
         
         {/* Outer Glow Effect behind card */}
@@ -1051,6 +1158,10 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
         return <HistoryView onBack={() => setShowHistory(false)} />;
     }
 
+    if (activeTab === 'manage') {
+        return <FamilyManage onBack={handleBack} onSubPageChange={setIsManageSubPageOpen} />;
+    }
+
     if (activeTab === 'home') {
       return (
         <div className="pb-32">
@@ -1167,16 +1278,15 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
                         <span className="text-xs font-medium px-2 py-0.5 bg-white/10 rounded-full text-gray-300">{allMembers.length} / 200</span>
                     </div>
                     
-                    {/* Filter Dropdown */}
+                    {/* Filter Dropdown - Updated for Season/Total */}
                     <div className="relative">
                         <select 
                             value={filter}
                             onChange={(e) => setFilter(e.target.value as FilterType)}
                             className="appearance-none bg-[#252529] text-white text-xs font-medium pl-3 pr-8 py-1.5 rounded-lg border border-white/10 focus:outline-none focus:border-[#A540FF] transition-colors cursor-pointer"
                         >
-                            <option value="Total">Total Contrib</option>
-                            <option value="Month">Monthly</option>
-                            <option value="Week">Weekly</option>
+                            <option value="Season">Current Season</option>
+                            <option value="Total">Total</option>
                         </select>
                         <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                     </div>
@@ -1512,59 +1622,52 @@ export const FamilyView: React.FC<FamilyViewProps> = ({ onBack, initialTab = 'ho
             </div>
         );
     }
-
-    if (activeTab === 'manage') {
-        return <FamilyManage onBack={handleBack} onSubPageChange={setIsManageSubPageOpen} />;
-    }
-
-    return null;
-  };
+    
+    return null; // Fallback
+  }
 
   return (
-    <div className="w-full min-h-screen bg-[#0f0f11] text-white relative overflow-x-hidden animate-in slide-in-from-right duration-300">
-      
-      {/* Content Renderer */}
-      {renderContent()}
-
-      {/* Floating Bottom Navigation (iOS Style) - Hide if History is showing OR in manage sub-page */}
-      {!showHistory && !(activeTab === 'manage' && isManageSubPageOpen) && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-[420px] z-50">
-             <div className="bg-[#0f0f11]/25 backdrop-blur-3xl border border-white/10 rounded-[32px] grid grid-cols-5 px-2 gap-2 items-center py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)] ring-1 ring-white/5">
-                 <NavButton 
-                    icon={Home} 
-                    label="Home" 
-                    active={activeTab === 'home'} 
-                    onClick={() => setActiveTab('home')} 
-                 />
-                 <NavButton 
-                    icon={ClipboardCheck} 
-                    label="Tasks" 
-                    active={activeTab === 'tasks'} 
-                    onClick={() => setActiveTab('tasks')} 
-                    badge={unclaimedCount}
-                 />
-                 <NavButton 
-                    icon={BarChart3} 
-                    label="Rankings" 
-                    active={activeTab === 'rankings'} 
-                    onClick={() => setActiveTab('rankings')} 
-                 />
-                 <NavButton 
-                    icon={Calendar} 
-                    label="Events" 
-                    active={activeTab === 'events'} 
-                    onClick={() => setActiveTab('events')} 
-                 />
-                 <NavButton 
-                    icon={MoreHorizontal} 
-                    label="More" 
-                    active={activeTab === 'manage'} 
-                    onClick={() => setActiveTab('manage')} 
-                 />
-             </div>
-          </div>
-      )}
-
+    <div className="min-h-screen bg-[#0f0f11] relative">
+        {renderContent()}
+        
+        {/* Navigation (Only show on main tabs) */}
+        {['home', 'tasks', 'rankings', 'events'].includes(activeTab) && !showHistory && !isManageSubPageOpen && (
+             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-[420px] z-50">
+                <div className="bg-[#0f0f11]/25 backdrop-blur-3xl border border-white/10 rounded-[32px] grid grid-cols-5 px-2 gap-1 items-center py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)] ring-1 ring-white/5">
+                    <NavButton 
+                        icon={Home} 
+                        label="Home" 
+                        active={activeTab === 'home'} 
+                        onClick={() => setActiveTab('home')} 
+                    />
+                    <NavButton 
+                        icon={ClipboardCheck} 
+                        label="Tasks" 
+                        active={activeTab === 'tasks'} 
+                        onClick={() => setActiveTab('tasks')} 
+                        badge={unclaimedCount}
+                    />
+                     <NavButton 
+                        icon={BarChart3} 
+                        label="Rankings" 
+                        active={activeTab === 'rankings'} 
+                        onClick={() => setActiveTab('rankings')} 
+                    />
+                    <NavButton 
+                        icon={Calendar} 
+                        label="Events" 
+                        active={activeTab === 'events'} 
+                        onClick={() => setActiveTab('events')} 
+                    />
+                    <NavButton 
+                        icon={Settings} 
+                        label="Manage" 
+                        active={activeTab === 'manage'} 
+                        onClick={() => setActiveTab('manage')} 
+                    />
+                </div>
+            </div>
+        )}
     </div>
   );
 };

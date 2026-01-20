@@ -1,18 +1,19 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { 
   ChevronLeft, Users, Shield, Trophy, Star, Crown, Share2, CircleHelp, Coins, FilePenLine, UserPlus, Medal, ChevronDown,
-  Home, ClipboardCheck, BarChart3, Calendar, Settings, Gift, Clock, PlayCircle, CheckCircle2, Zap, Check, X, Gem, Video, MoreHorizontal, Swords, Flame, HeartHandshake, Mic2, Sparkles, Gamepad2, ChevronRight, History, TrendingUp, MessageCircle, FileText, Send, Compass, PlusCircle, Search, Play, Target, ShieldCheck, Camera, CircleDashed, Lock
+  Home, ClipboardCheck, BarChart3, Calendar, Settings, Gift, Clock, PlayCircle, CheckCircle2, Zap, Check, X, Gem, Video, MoreHorizontal, Swords, Flame, HeartHandshake, Mic2, Sparkles, Gamepad2, ChevronRight, History, TrendingUp, MessageCircle, FileText, Send, Compass, PlusCircle, Search, Play, Target, ShieldCheck, Camera, CircleDashed, Lock, Filter, MessageSquareQuote, Info, AlertTriangle
 } from 'lucide-react';
+
+export type FamilyTabType = 'home' | 'rankings' | 'events';
 
 interface FamilyGuestViewProps {
   onBack: () => void;
   initialView?: 'home' | 'benefits'; // New prop
-  initialTab?: 'home' | 'rankings' | 'events';
+  initialTab?: FamilyTabType;
 }
 
-type FilterType = 'Total' | 'Month' | 'Week';
+type FilterType = 'Season' | 'Total';
 // Guest tabs: No 'tasks' or 'manage'
-export type FamilyTabType = 'home' | 'rankings' | 'events';
 type RankingCategory = 'Level' | 'Duration' | 'Received' | 'Supported' | 'PK Wins';
 type TimeFilter = 'Daily' | 'Weekly' | 'Monthly';
 type ApplyStatus = 'idle' | 'pending';
@@ -33,10 +34,9 @@ interface RankingItem {
 // Role definitions for styling
 const ROLE_STYLES: Record<string, string> = {
   'Tribe Chief': 'bg-gradient-to-r from-yellow-600 to-amber-500 text-white border-none',
-  'Admin': 'bg-purple-500/20 text-purple-400 border border-purple-500/20',
-  'Streamer': 'bg-pink-500/20 text-pink-400 border border-pink-500/20',
-  'Supporter': 'bg-blue-500/20 text-blue-400 border border-blue-500/20',
-  'Speaker': 'bg-green-500/20 text-green-400 border border-green-500/20',
+  'The Arif': 'bg-purple-500/20 text-purple-400 border border-purple-500/20',
+  'Fazaa Knights': 'bg-pink-500/20 text-pink-400 border border-pink-500/20',
+  'The Wajeeh': 'bg-blue-500/20 text-blue-400 border border-blue-500/20',
   'Member': 'bg-gray-700/50 text-gray-400 border border-white/5',
 };
 
@@ -134,15 +134,145 @@ const MOCK_RANKINGS: Record<RankingCategory, RankingItem[]> = {
     }))
 };
 
+// --- Sub-Component: Recruitment Hall (Discover More Tribes) ---
+const RecruitmentHall = ({ onBack, onApply, onTribeClick }: { onBack: () => void, onApply: (tribe: any) => void, onTribeClick: (tribe: any) => void }) => {
+    const [sortBy, setSortBy] = useState<'newest' | 'level'>('newest');
+
+    // Mock Recruitment Data
+    const RECRUITMENT_LIST = useMemo(() => {
+        return Array.from({ length: 15 }, (_, i) => ({
+            id: `recruit-${i}`,
+            name: FAMILY_NAMES[i % FAMILY_NAMES.length],
+            avatar: `https://api.dicebear.com/9.x/glass/svg?seed=recruit_${i}`,
+            level: Math.floor(Math.random() * 20) + 1,
+            members: Math.floor(Math.random() * 50) + 10,
+            maxMembers: 60 + Math.floor(Math.random() * 2) * 20,
+            slogan: i % 3 === 0 ? "Looking for active PK players! Join us for daily battles ⚔️" :
+                    i % 3 === 1 ? "Chill vibes only 🎵 Make friends and have fun." :
+                    "Top 10 Tribe recruiting high level supporters! 🏆",
+            isNew: i < 3
+        })).sort((a, b) => {
+            if (sortBy === 'level') return b.level - a.level;
+            return 0; // Default order implies "newest" as is
+        });
+    }, [sortBy]);
+
+    return (
+        <div className="absolute inset-0 z-[60] bg-[#0f0f11] animate-in slide-in-from-right duration-300 flex flex-col">
+            {/* Header */}
+            <div className="sticky top-0 left-0 w-full z-50 py-4 flex items-center justify-between bg-[#0f0f11]/95 backdrop-blur-md px-4 border-b border-white/5">
+                <button onClick={onBack} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition">
+                    <ChevronLeft className="w-6 h-6 text-white" />
+                </button>
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white flex items-center gap-2">
+                    <Compass className="w-5 h-5 text-[#A540FF]" />
+                    Discover Tribes
+                </div>
+                <div className="w-10"></div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto">
+                {/* Banner Area */}
+                <div className="px-4 mt-4 mb-6">
+                    <div className="bg-gradient-to-r from-purple-900/40 to-blue-900/40 rounded-2xl p-5 border border-white/10 relative overflow-hidden">
+                        <div className="relative z-10">
+                            <h2 className="text-xl font-bold text-white mb-1">Find Your Squad</h2>
+                            <p className="text-xs text-gray-300 max-w-[80%]">Explore recruitment announcements from top tribes. Find the community that fits your style.</p>
+                        </div>
+                        <Users className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-white/5" />
+                    </div>
+                </div>
+
+                {/* Filter Tabs */}
+                <div className="px-4 flex items-center gap-2 mb-4 sticky top-0 z-40">
+                    <button 
+                        onClick={() => setSortBy('newest')}
+                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${
+                            sortBy === 'newest' 
+                            ? 'bg-[#A540FF] text-white border-[#A540FF]' 
+                            : 'bg-[#1a1a1d] text-gray-400 border-white/10 hover:border-white/20'
+                        }`}
+                    >
+                        Newest
+                    </button>
+                    <button 
+                         onClick={() => setSortBy('level')}
+                         className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${
+                            sortBy === 'level' 
+                            ? 'bg-[#A540FF] text-white border-[#A540FF]' 
+                            : 'bg-[#1a1a1d] text-gray-400 border-white/10 hover:border-white/20'
+                        }`}
+                    >
+                        Highest Level
+                    </button>
+                </div>
+
+                {/* List */}
+                <div className="px-4 space-y-3 pb-10">
+                    {RECRUITMENT_LIST.map((tribe) => (
+                        <div 
+                            key={tribe.id} 
+                            onClick={() => onTribeClick(tribe)}
+                            className="bg-[#1a1a1d] rounded-2xl p-4 border border-white/5 hover:border-white/10 transition-colors group cursor-pointer active:scale-[0.98] transition-transform"
+                        >
+                            
+                            {/* Top Row: Info */}
+                            <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                    <div className="relative">
+                                        <img src={tribe.avatar} className="w-14 h-14 rounded-xl object-cover bg-black/20" alt={tribe.name} />
+                                        {tribe.isNew && (
+                                            <div className="absolute -top-1.5 -left-1.5 bg-green-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-[#1a1a1d]">NEW</div>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="font-bold text-white text-base">{tribe.name}</h3>
+                                            <div className="flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded text-[10px] font-bold border border-yellow-500/20">
+                                                <Shield className="w-2.5 h-2.5 fill-yellow-500" />
+                                                Lv.{tribe.level}
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3 mt-1 text-[11px] text-gray-500 font-medium">
+                                            <span className="flex items-center gap-1">
+                                                <Users className="w-3 h-3" /> {tribe.members}/{tribe.maxMembers}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onApply(tribe);
+                                    }}
+                                    className="bg-white/10 hover:bg-[#A540FF] hover:text-white text-[#A540FF] text-xs font-bold px-4 py-2 rounded-xl transition-all active:scale-95 border border-[#A540FF]/30 hover:border-[#A540FF]"
+                                >
+                                    Apply
+                                </button>
+                            </div>
+
+                            {/* Middle: Slogan */}
+                            <div className="bg-black/20 rounded-xl p-3 relative">
+                                <MessageSquareQuote className="absolute top-2 left-2 w-4 h-4 text-gray-600 opacity-50" />
+                                <p className="text-sm text-gray-300 italic pl-5 leading-relaxed">"{tribe.slogan}"</p>
+                            </div>
+
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // --- Sub-Component: Family Creation Check ---
 const FamilyCreationCheck = ({ onBack, onNext }: { onBack: () => void, onNext: () => void }) => {
     const [checkedCount, setCheckedCount] = useState(0);
     const rules = [
         { id: 1, text: "No violation records in last 30 days", icon: ShieldCheck },
-        { id: 2, text: "Account Level > 10", icon: Trophy },
-        { id: 3, text: "Gifted > 1,000 Coins (last 7 days)", icon: Coins },
-        { id: 4, text: "Valid Stream > 10 mins (last 7 days)", icon: Video },
-        { id: 5, text: "Revenue > 4,000 Diamonds", icon: Gem },
+        { id: 2, text: "Account Level > 40", icon: Trophy },
+        { id: 3, text: "Coins Balance > 40,000", icon: Coins },
     ];
 
     useEffect(() => {
@@ -152,7 +282,7 @@ const FamilyCreationCheck = ({ onBack, onNext }: { onBack: () => void, onNext: (
             }, 600); // 600ms per check for visual effect
             return () => clearTimeout(timer);
         }
-    }, [checkedCount]);
+    }, [checkedCount, rules.length]);
 
     const allPassed = checkedCount === rules.length;
 
@@ -223,10 +353,7 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
     const [slogan, setSlogan] = useState('');
     const [avatar, setAvatar] = useState<string | null>(null);
 
-    // Advanced Settings
-    const [joinCondition, setJoinCondition] = useState<'none' | 'followers' | 'level'>('none');
-    const [conditionValue, setConditionValue] = useState('');
-    const [approvalMethod, setApprovalMethod] = useState<'chief' | 'admin'>('admin');
+    // Advanced Settings (Removed Join Condition & Approval Method)
     const [allowMemberInvite, setAllowMemberInvite] = useState(false);
 
     const handleAvatarClick = () => {
@@ -234,8 +361,8 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
         setAvatar("https://image.pollinations.ai/prompt/Futuristic%20lion%20logo%20purple%20neon?width=200&height=200&seed=123&nologo=true");
     };
 
-    const isFormValid = name.length > 0 && slogan.length > 0 && avatar !== null && 
-        (joinCondition === 'none' || conditionValue.length > 0);
+    // Updated validation logic (Name & Avatar mandatory, Slogan optional)
+    const isFormValid = name.trim().length > 0 && avatar !== null;
 
     return (
         <div className="absolute inset-0 z-[60] bg-[#0f0f11] animate-in slide-in-from-right duration-300 flex flex-col">
@@ -274,114 +401,71 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
                                 </div>
                             )}
                         </div>
-                        <span className="text-xs text-gray-500 mt-3 font-medium">Tribe Avatar</span>
+                        <span className="text-xs text-gray-500 mt-2 font-medium">Tribe Avatar <span className="text-red-500">*</span></span>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-5">
+                        {/* Name Input */}
                         <div>
-                            <input 
-                                type="text" 
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Tribe Name"
-                                className="w-full bg-[#1a1a1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-[#A540FF] transition-colors text-sm"
-                            />
+                            <div className="relative">
+                                <input 
+                                    type="text" 
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    placeholder="Tribe Name"
+                                    maxLength={30}
+                                    className="w-full bg-[#1a1a1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-[#A540FF] transition-colors text-sm"
+                                />
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-600">
+                                    {name.length}/30
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-1.5 mt-2 px-1">
+                                <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
+                                <p className="text-xs text-gray-500 leading-relaxed">
+                                    Please submit with caution. You can only change the tribe name after upgrading and unlocking.
+                                </p>
+                            </div>
                         </div>
                         
+                        {/* Slogan Input */}
                         <div>
-                            <textarea 
-                                value={slogan}
-                                onChange={(e) => setSlogan(e.target.value)}
-                                placeholder="Write a catchy slogan..."
-                                rows={3}
-                                className="w-full bg-[#1a1a1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-[#A540FF] transition-colors resize-none text-sm"
-                            />
+                            <div className="relative">
+                                <textarea 
+                                    value={slogan}
+                                    onChange={(e) => setSlogan(e.target.value)}
+                                    placeholder="Write a catchy slogan (Optional)..."
+                                    rows={3}
+                                    maxLength={200}
+                                    className="w-full bg-[#1a1a1d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-[#A540FF] transition-colors resize-none text-sm"
+                                />
+                                <div className="absolute right-3 bottom-3 text-xs text-gray-600">
+                                    {slogan.length}/200
+                                </div>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1 px-1">
+                                Max 200 characters. Supports English, Arabic, Symbols & Emojis.
+                            </p>
                         </div>
                     </div>
                 </section>
 
-                {/* 2. Application Settings Section */}
+                {/* 2. Invite Settings Section */}
                 <section>
-                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">Application Settings</h3>
+                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">Invite Settings</h3>
                     
                     <div className="bg-[#1a1a1d] rounded-xl border border-white/5 overflow-hidden">
-                        
-                        {/* Join Condition */}
-                        <div className="p-4 border-b border-white/5">
-                            <label className="text-sm font-bold text-white block mb-3">Join Condition</label>
-                            <div className="flex flex-wrap gap-2">
-                                {[
-                                    { id: 'none', label: 'No Condition' },
-                                    { id: 'followers', label: 'Followers >' },
-                                    { id: 'level', label: 'Support Lv >' }
-                                ].map((opt) => (
-                                    <button
-                                        key={opt.id}
-                                        onClick={() => {
-                                            setJoinCondition(opt.id as any);
-                                            setConditionValue(''); // Reset value on change
-                                        }}
-                                        className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
-                                            joinCondition === opt.id 
-                                            ? 'bg-[#A540FF]/20 border-[#A540FF] text-[#A540FF]' 
-                                            : 'bg-white/5 border-transparent text-gray-400 hover:bg-white/10'
-                                        }`}
-                                    >
-                                        {opt.label}
-                                    </button>
-                                ))}
-                            </div>
-                            
-                            {/* Dynamic Input for Condition Value */}
-                            {joinCondition !== 'none' && (
-                                <div className="mt-3 animate-in slide-in-from-top-2 duration-200">
-                                    <input 
-                                        type="number"
-                                        value={conditionValue}
-                                        onChange={(e) => setConditionValue(e.target.value)}
-                                        placeholder={joinCondition === 'followers' ? "Enter min followers (e.g. 1000)" : "Enter min level (e.g. 10)"}
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-[#A540FF]"
-                                    />
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Approval Method */}
-                        <div className="p-4 border-b border-white/5">
-                            <label className="text-sm font-bold text-white block mb-3">Approval Method</label>
-                            <div className="flex gap-3">
-                                <button 
-                                    onClick={() => setApprovalMethod('chief')}
-                                    className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
-                                        approvalMethod === 'chief'
-                                        ? 'bg-[#A540FF]/20 border-[#A540FF] text-[#A540FF]' 
-                                        : 'bg-white/5 border-transparent text-gray-400'
-                                    }`}
-                                >
-                                    Chief Only
-                                </button>
-                                <button 
-                                    onClick={() => setApprovalMethod('admin')}
-                                    className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-all ${
-                                        approvalMethod === 'admin'
-                                        ? 'bg-[#A540FF]/20 border-[#A540FF] text-[#A540FF]' 
-                                        : 'bg-white/5 border-transparent text-gray-400'
-                                    }`}
-                                >
-                                    Admin & Chief
-                                </button>
-                            </div>
-                        </div>
-
                         {/* Member Invite Permission */}
                         <div className="p-4 flex items-center justify-between">
-                            <div>
-                                <div className="text-sm font-bold text-white">Member Invite</div>
-                                <div className="text-[10px] text-gray-500">Allow members to invite others</div>
+                            <div className="max-w-[80%]">
+                                <div className="text-sm font-bold text-white">Allow Member Invite</div>
+                                <div className="text-xs text-gray-500 mt-1 leading-relaxed">
+                                    Any member can invite others to join the tribe without review
+                                </div>
                             </div>
                             <button 
                                 onClick={() => setAllowMemberInvite(!allowMemberInvite)}
-                                className={`w-10 h-6 rounded-full p-1 transition-colors ${
+                                className={`w-10 h-6 rounded-full p-1 transition-colors flex-shrink-0 ${
                                     allowMemberInvite ? 'bg-[#A540FF]' : 'bg-gray-700'
                                 }`}
                             >
@@ -390,14 +474,13 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
                                 }`} />
                             </button>
                         </div>
-
                     </div>
                 </section>
             </div>
 
             <div className="p-6 border-t border-white/5 bg-[#0f0f11] flex flex-col gap-3">
                  <button 
-                    onClick={() => onSubmit({ name, slogan, avatar, joinCondition, conditionValue, approvalMethod, allowMemberInvite })}
+                    onClick={() => onSubmit({ name, slogan, avatar, allowMemberInvite })}
                     disabled={!isFormValid}
                     className={`w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                         isFormValid 
@@ -407,7 +490,7 @@ const FamilyCreationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit
                 >
                     Confirm Creation
                 </button>
-                <p className="text-[10px] text-gray-500 text-center">
+                <p className="text-xs text-gray-500 text-center">
                     * You can modify these settings anytime after creation.
                 </p>
             </div>
@@ -685,7 +768,7 @@ const ApplyFamilyPage = ({ onBack, onSubmit, family }: { onBack: () => void, onS
                     />
                     <div>
                         <div className="text-white font-bold text-lg">{target.name}</div>
-                        <div className="text-gray-400 text-xs mt-0.5">ID: {target.id || Math.floor(Math.random()*100000)} • Lv.{target.level}</div>
+                        <div className="text-gray-400 text-xs mt-0.5">Lv.{target.level}</div>
                     </div>
                 </div>
 
@@ -736,7 +819,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
   const HEADER_BG = "https://img.jacocdn.com/large/3b9ae203la1i8yryvrmrxj20rs0rpnpd.jpg";
 
   const [activeTab, setActiveTab] = useState<FamilyTabType>(initialTab);
-  const [filter, setFilter] = useState<FilterType>('Total');
+  const [filter, setFilter] = useState<FilterType>('Season');
   const [visibleCount, setVisibleCount] = useState(20);
   
   // Application State
@@ -746,12 +829,22 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
   const [showToast, setShowToast] = useState(false);
   const [showBenefits, setShowBenefits] = useState(initialView === 'benefits'); // Init based on prop
   const [createFlowStep, setCreateFlowStep] = useState<CreateStep>('idle'); // New State for Create Flow
+  const [showDiscoverList, setShowDiscoverList] = useState(false); // New state for recruitment hall
 
   // Rankings State
   const [rankingCategory, setRankingCategory] = useState<RankingCategory>('Level');
   const [rankingTimeFilter, setRankingTimeFilter] = useState<TimeFilter>('Daily');
   // Timer State for Refresh
   const [timeLeft, setTimeLeft] = useState(19 * 3600 + 29 * 60 + 32); // Initial seconds
+
+  // Active Family Data State
+  const [currentFamilyData, setCurrentFamilyData] = useState({
+        name: "Royal Lions",
+        avatar: FAMILY_AVATAR,
+        level: 14,
+        slogan: "We roar together, we win together! 🦁",
+        members: 154
+  });
 
   useEffect(() => {
     // Only run timer if not in Level tab
@@ -783,8 +876,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
   // Handlers for Benefits Page
   const handleDiscoverFamily = () => {
       setShowBenefits(false);
-      // Go to rankings to discover families
-      setActiveTab('rankings');
+      setShowDiscoverList(true); // Switch to the Recruitment Hall
   };
   
   const handleCreateFamily = () => {
@@ -796,17 +888,31 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
       setIsApplying(true);
   };
 
+  // Handler for clicking a tribe card in Recruitment Hall
+  const handleTribeClick = (tribe: any) => {
+      setCurrentFamilyData({
+          name: tribe.name,
+          avatar: tribe.avatar,
+          level: tribe.level,
+          members: tribe.members,
+          slogan: tribe.slogan
+      });
+      setShowDiscoverList(false); // Close the list
+      setActiveTab('home'); // Ensure we are on the home tab
+  };
+
   // Generate extended mock data
   const allMembers = useMemo(() => {
-    const roles = ['Member', 'Streamer', 'Supporter', 'Speaker', 'Admin'];
+    // UPDATED ROLES HERE
+    const roles = ['Member', 'The Arif', 'Fazaa Knights', 'The Wajeeh'];
     const baseMembers = [
-      { id: 1, name: "Ahmed_Live", role: "Tribe Chief", contributionTotal: "1.2M", contributionMonth: "300K", contributionWeek: "50K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
-      { id: 2, name: "Desert_King", role: "Admin", contributionTotal: "850K", contributionMonth: "210K", contributionWeek: "45K", avatar: "https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true" },
-      { id: 3, name: "Sarah_Gamer", role: "Admin", contributionTotal: "720K", contributionMonth: "180K", contributionWeek: "40K", avatar: "https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true" },
-      { id: 4, name: "Falcon_Eye", role: "Streamer", contributionTotal: "450K", contributionMonth: "120K", contributionWeek: "30K", avatar: "https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true" },
-      { id: 5, name: "Riyadh_Drift", role: "Supporter", contributionTotal: "300K", contributionMonth: "90K", contributionWeek: "25K", avatar: "https://image.pollinations.ai/prompt/Race%20car%20driver?width=100&height=100&seed=55&nologo=true" },
-      { id: 6, name: "Coffee_Lover", role: "Speaker", contributionTotal: "280K", contributionMonth: "85K", contributionWeek: "20K", avatar: "https://image.pollinations.ai/prompt/Arab%20coffee%20dallah?width=100&height=100&seed=66&nologo=true" },
-      { id: 7, name: "Night_Owl", role: "Member", contributionTotal: "150K", contributionMonth: "50K", contributionWeek: "10K", avatar: "https://image.pollinations.ai/prompt/Owl%20neon?width=100&height=100&seed=77&nologo=true" },
+      { id: 1, name: "Ahmed_Live", role: "Tribe Chief", contributionTotal: "1.2M", contributionSeason: "300K", avatar: "https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=800&height=1000&seed=88&nologo=true" },
+      { id: 2, name: "Desert_King", role: "The Arif", contributionTotal: "850K", contributionSeason: "210K", avatar: "https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true" },
+      { id: 3, name: "Sarah_Gamer", role: "The Arif", contributionTotal: "720K", contributionSeason: "180K", avatar: "https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true" },
+      { id: 4, name: "Falcon_Eye", role: "Fazaa Knights", contributionTotal: "450K", contributionSeason: "120K", avatar: "https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true" },
+      { id: 5, name: "Riyadh_Drift", role: "The Wajeeh", contributionTotal: "300K", contributionSeason: "90K", avatar: "https://image.pollinations.ai/prompt/Race%20car%20driver?width=100&height=100&seed=55&nologo=true" },
+      { id: 6, name: "Coffee_Lover", role: "Fazaa Knights", contributionTotal: "280K", contributionSeason: "85K", avatar: "https://image.pollinations.ai/prompt/Arab%20coffee%20dallah?width=100&height=100&seed=66&nologo=true" },
+      { id: 7, name: "Night_Owl", role: "Member", contributionTotal: "150K", contributionSeason: "50K", avatar: "https://image.pollinations.ai/prompt/Owl%20neon?width=100&height=100&seed=77&nologo=true" },
     ];
 
     // Generate remaining members to reach 60
@@ -819,8 +925,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
         name: `User_${id}`,
         role,
         contributionTotal: `${total}K`,
-        contributionMonth: `${(total * 0.3).toFixed(1)}K`,
-        contributionWeek: `${(total * 0.05).toFixed(1)}K`,
+        contributionSeason: `${(total * 0.3).toFixed(1)}K`,
         avatar: `https://image.pollinations.ai/prompt/Arab%20avatar%20portrait%20illustration?width=100&height=100&seed=${id + 200}&nologo=true`
       };
     });
@@ -834,8 +939,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
 
   const getContributionDisplay = (member: any) => {
     switch (filter) {
-      case 'Month': return member.contributionMonth;
-      case 'Week': return member.contributionWeek;
+      case 'Season': return member.contributionSeason;
       default: return member.contributionTotal;
     }
   };
@@ -870,6 +974,20 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
     const top3 = data.slice(0, 3);
     const rest = data.slice(3);
     const podium = [top3[1], top3[0], top3[2]];
+    
+    // Current User Rank Mock
+    const myRank = {
+        rank: 12,
+        name: "Royal Lions",
+        avatar: FAMILY_AVATAR,
+        value: rankingCategory === 'Level' ? "Lv. 14" : 
+               rankingCategory === 'Duration' ? "450 Hrs" : 
+               rankingCategory === 'Received' ? "120.5M" : 
+               rankingCategory === 'Supported' ? "88.2M" : "85 Wins",
+        trend: 'up',
+        level: 14,
+        members: 154
+    };
 
     return (
         <div className="pb-32 min-h-screen relative bg-[#0f0f11]">
@@ -1020,41 +1138,136 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                     ))}
                 </div>
             </div>
+
+            {/* Sticky "My Family" Rank Footer */}
+            <div className="fixed bottom-[88px] left-1/2 -translate-x-1/2 w-[92%] max-w-[400px] z-40 animate-in slide-in-from-bottom-10 duration-500">
+                <div className="bg-[#242429] border border-[#A540FF]/30 rounded-2xl p-3 flex items-center shadow-[0_4px_20px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#A540FF]/10 to-transparent pointer-events-none"></div>
+                    
+                    <div className="w-8 font-bold text-white text-center z-10">{myRank.rank}</div>
+                    <img src={myRank.avatar} className="w-10 h-10 rounded-full object-cover border border-[#A540FF]/50 mr-3 z-10" alt="Me" />
+                    
+                    <div className="flex-1 z-10 min-w-0">
+                        <div className="font-bold text-sm text-white flex items-center gap-2">
+                            {myRank.name}
+                            <span className="text-[10px] bg-[#A540FF] text-white px-1.5 rounded font-bold flex-shrink-0">My Tribe</span>
+                        </div>
+                         <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-0.5">
+                                {rankingCategory !== 'Level' && (
+                                    <span className="bg-yellow-500/10 text-yellow-500 px-1 rounded flex items-center gap-0.5 border border-yellow-500/20 font-bold">
+                                        Lv.{myRank.level}
+                                    </span>
+                                )}
+                                <span className="flex items-center gap-0.5">
+                                    <Users className="w-3 h-3" /> {myRank.members}
+                                </span>
+                        </div>
+                    </div>
+                    
+                    <div className="text-right z-10 flex-shrink-0 ml-2">
+                        <div className="text-sm font-bold text-white flex items-center justify-end gap-1.5">
+                           {myRank.value}
+                        </div>
+                        <div className="text-[10px] text-gray-400 flex items-center justify-end gap-1">
+                           To No.{myRank.rank - 1}: <span className="text-white">
+                             {rankingCategory === 'Level' && '1,232 Exp'}
+                             {rankingCategory === 'Duration' && '232 Hrs'}
+                             {rankingCategory === 'Received' && '2,133 Diamonds'}
+                             {rankingCategory === 'Supported' && '150K Coins'}
+                             {rankingCategory === 'PK Wins' && '12 Wins'}
+                           </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
   }
 
+  // --- Main Render Logic ---
   const renderContent = () => {
-    // 1. Create Flow Logic
-    if (createFlowStep === 'check') {
-         return <FamilyCreationCheck onBack={() => setCreateFlowStep('idle')} onNext={() => setCreateFlowStep('form')} />;
-    }
+    if (isApplying) return <ApplyFamilyPage onBack={() => setIsApplying(false)} onSubmit={handleApplySubmit} family={applyingFamily} />;
     
-    if (createFlowStep === 'form') {
-         return <FamilyCreationForm 
-            onBack={() => setCreateFlowStep('check')} 
-            onSubmit={(data) => {
-                setShowToast(true);
-                setCreateFlowStep('idle');
-                // Could also navigate to "My Family" here
-            }} 
-         />;
-    }
+    if (createFlowStep === 'check') return <FamilyCreationCheck onBack={() => setCreateFlowStep('idle')} onNext={() => setCreateFlowStep('form')} />;
+    
+    if (createFlowStep === 'form') return <FamilyCreationForm onBack={() => setCreateFlowStep('check')} onSubmit={(data) => {
+        setCreateFlowStep('idle');
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+    }} />;
+    
+    if (showDiscoverList) return <RecruitmentHall 
+        onBack={() => setShowDiscoverList(false)} 
+        onApply={handleApplyClick} 
+        onTribeClick={handleTribeClick}
+    />;
+    
+    if (showBenefits) return <FamilyBenefitsPage 
+        onBack={onBack} 
+        onDiscover={handleDiscoverFamily} 
+        onCreate={handleCreateFamily} 
+    />;
 
-    // 2. Show Benefits FAQ
-    if (showBenefits) {
-        return <FamilyBenefitsPage onBack={() => setShowBenefits(false)} onDiscover={handleDiscoverFamily} onCreate={handleCreateFamily} />;
-    }
+    // Rankings View
+    if (activeTab === 'rankings') return renderRankings();
 
-    // 3. Show Apply Form Overlay
-    if (isApplying) {
-        return <ApplyFamilyPage onBack={() => setIsApplying(false)} onSubmit={handleApplySubmit} family={applyingFamily} />;
-    }
+    if (activeTab === 'events') {
+        return (
+            <div className="pb-32 min-h-screen relative bg-[#0f0f11]">
+                 {/* Header */}
+                <div className="sticky top-0 left-0 w-full z-50 py-4 flex items-center justify-between bg-[#0f0f11]/80 backdrop-blur-md px-4 border-b border-white/5 relative">
+                    <button 
+                        onClick={onBack} 
+                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 hover:bg-black/40 transition active:scale-95 flex-shrink-0"
+                    >
+                    <ChevronLeft className="w-6 h-6 text-white" />
+                    </button>
+                    
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white flex items-center gap-2">
+                        <Calendar className="w-5 h-5 text-[#A540FF]" />
+                        Official Events
+                    </div>
+                    
+                    <div className="w-10"></div>
+                </div>
 
-    if (activeTab === 'home') {
-      return (
-        <div className="pb-10">
-            {/* Background Effect */}
+                {/* Content Container */}
+                <div className="px-4 pt-4 space-y-4">
+                    {FAMILY_EVENTS.map(event => (
+                        <div key={event.id} className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/5 relative group">
+                            
+                            <div className="relative aspect-[4/3] w-full overflow-hidden">
+                                <img 
+                                    src={event.image} 
+                                    alt={event.title} 
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                />
+                                <div className={`absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-gradient-to-r ${event.tagColor} shadow-lg uppercase tracking-wider`}>
+                                    {event.tag}
+                                </div>
+                            </div>
+
+                            <div className={`p-4 flex justify-between items-center relative z-20 bg-gradient-to-br ${event.cardBg}`}>
+                                <div>
+                                    <h3 className="text-base font-bold text-white leading-tight mb-1">{event.title}</h3>
+                                    <p className="text-xs text-gray-300 font-medium opacity-80">{event.subtitle}</p>
+                                </div>
+                                <button className="bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/5 shadow-sm">
+                                    View
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="h-6"></div>
+                </div>
+            </div>
+        );
+    }
+  
+    // Home View (Default)
+    return (
+        <div className="pb-32">
+            {/* Background Effect: Blurred Avatar */}
             <div className="absolute top-0 left-0 right-0 h-[500px] z-0 overflow-hidden pointer-events-none">
                 <img 
                     src={HEADER_BG} 
@@ -1088,51 +1301,37 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                 <div className="relative mb-5 transform transition-transform hover:scale-105 duration-300">
                     <div className="w-28 h-28 rounded-full p-[3px] bg-gradient-to-tr from-yellow-600 via-yellow-200 to-yellow-500 shadow-[0_0_30px_rgba(234,179,8,0.3)]">
                         <img 
-                            src={FAMILY_AVATAR}
+                            src={currentFamilyData.avatar}
                             className="w-full h-full rounded-full object-cover border-4 border-[#1a1a1d]"
                             alt="Family"
                         />
                     </div>
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-600 to-amber-500 text-white text-xs font-bold px-3 py-0.5 rounded-full border-2 border-[#1a1a1d] shadow-lg flex items-center gap-1 whitespace-nowrap">
                         <Shield className="w-3 h-3 fill-white" />
-                        Lv 14
+                        Lv {currentFamilyData.level}
                     </div>
                 </div>
 
-                <h1 className="text-2xl font-bold text-white mt-2 mb-1 drop-shadow-lg">Royal Lions</h1>
-                <p className="text-sm text-gray-200 italic mb-6 font-medium tracking-wide drop-shadow-md">"We roar together, we win together! 🦁"</p>
-
-                {/* Apply to Join Button - Logic Updated */}
-                {applyStatus === 'idle' ? (
-                     <button 
-                        onClick={() => handleApplyClick()}
-                        className="bg-gradient-to-r from-[#A540FF] to-purple-600 hover:brightness-110 text-white font-bold py-3 px-12 rounded-full shadow-[0_4px_20px_rgba(165,64,255,0.4)] flex items-center justify-center gap-2 transition-transform active:scale-95"
-                     >
-                        <UserPlus className="w-5 h-5" />
-                        Apply to Join
+                <h1 className="text-2xl font-bold text-white mt-2 mb-1 drop-shadow-lg">{currentFamilyData.name}</h1>
+                <p className="text-sm text-gray-200 italic mb-4 font-medium tracking-wide drop-shadow-md text-center">"{currentFamilyData.slogan}"</p>
+                
+                {/* Join Button State */}
+                {applyStatus === 'pending' ? (
+                     <button disabled className="bg-gray-600/50 text-gray-300 px-8 py-2.5 rounded-full font-bold text-sm border border-white/10 flex items-center gap-2 cursor-not-allowed">
+                        <Clock className="w-4 h-4" /> Application Pending
                      </button>
                 ) : (
                     <button 
-                        disabled
-                        className="bg-gray-800 border border-gray-600 text-gray-300 font-bold py-3 px-12 rounded-full flex items-center justify-center gap-2 cursor-not-allowed shadow-inner"
-                     >
-                        <Clock className="w-5 h-5 text-gray-400" />
-                        Request Pending
-                     </button>
+                        onClick={() => handleApplyClick()}
+                        className="bg-[#A540FF] hover:bg-[#9333ea] text-white px-8 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-purple-600/20 active:scale-95 transition-all flex items-center gap-2"
+                    >
+                        Apply to Join
+                    </button>
                 )}
-                
-                {/* Why Join Hint */}
-                <button 
-                    onClick={() => setShowBenefits(true)}
-                    className="mt-4 text-xs text-gray-400 underline decoration-gray-500/50 hover:text-white hover:decoration-white transition-colors flex items-center gap-1"
-                >
-                    Why join a tribe?
-                    <ChevronRight className="w-3 h-3" />
-                </button>
             </div>
 
-            {/* Heroes' Hall Section - Moved Up */}
-            <div className="px-6 mt-4 relative z-10">
+            {/* Heroes' Hall Section */}
+            <div className="px-6 mt-6 relative z-10">
                 <div className="flex items-center justify-center mb-8">
                     <h3 className="font-bold text-lg flex items-center gap-2 text-white drop-shadow-md">
                         <Medal className="w-5 h-5 text-yellow-500 fill-yellow-500/20" />
@@ -1147,6 +1346,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                             <div className="absolute -top-[22px] z-20 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 <Crown className="w-7 h-7 text-yellow-300 fill-yellow-500" strokeWidth={1.5} />
                             </div>
+
                             <div className="relative w-[72px] h-[72px] mb-2">
                                 <div className="absolute inset-0 rounded-full bg-yellow-500 opacity-20 blur-md"></div>
                                 <div className="relative w-full h-full rounded-full p-[3px] bg-gradient-to-b from-yellow-300 via-orange-400 to-yellow-600 shadow-lg">
@@ -1164,7 +1364,7 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                 </div>
             </div>
 
-            {/* Member List Preview - Moved Up */}
+            {/* Member List */}
             <div className="px-4 mt-10 relative z-10">
                 <div className="flex items-center justify-between mb-4 px-1">
                     <div className="flex items-center gap-2">
@@ -1173,6 +1373,18 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                             Members
                         </h3>
                         <span className="text-xs font-medium px-2 py-0.5 bg-white/10 rounded-full text-gray-300">{allMembers.length} / 200</span>
+                    </div>
+                    
+                    <div className="relative">
+                        <select 
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value as FilterType)}
+                            className="appearance-none bg-[#252529] text-white text-xs font-medium pl-3 pr-8 py-1.5 rounded-lg border border-white/10 focus:outline-none focus:border-[#A540FF] transition-colors cursor-pointer"
+                        >
+                            <option value="Season">Current Season</option>
+                            <option value="Total">Total</option>
+                        </select>
+                        <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                     </div>
                 </div>
 
@@ -1218,94 +1430,80 @@ export const FamilyGuestView: React.FC<FamilyGuestViewProps> = ({ onBack, initia
                             className="text-xs text-gray-500 hover:text-white cursor-pointer py-4 flex flex-col items-center gap-1 transition-colors group"
                         >
                         <span className="group-hover:translate-y-1 transition-transform">Pull up to load more</span>
+                        <span className="text-[10px] opacity-50">(Click to load 20 more)</span>
                         </div>
                     ) : (
-                        <div className="text-[10px] text-gray-600 py-4">No more members</div>
+                        <div className="text-[10px] text-gray-600 py-4">
+                            No more members
+                        </div>
                     )}
                 </div>
+
             </div>
         </div>
-      );
-    } 
-    
-    // Rankings View (Identical for Guest)
-    if (activeTab === 'rankings') {
-        return renderRankings();
-    }
-
-    if (activeTab === 'events') {
-        return (
-            <div className="pb-32 min-h-screen relative bg-[#0f0f11]">
-                 {/* Header */}
-                <div className="sticky top-0 left-0 w-full z-50 py-4 flex items-center justify-between bg-[#0f0f11]/80 backdrop-blur-md px-4 border-b border-white/5 relative">
-                    <button 
-                        onClick={onBack} 
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-md border border-white/10 hover:bg-black/40 transition active:scale-95 flex-shrink-0"
-                    >
-                    <ChevronLeft className="w-6 h-6 text-white" />
-                    </button>
-                    
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold text-white flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-[#A540FF]" />
-                        Official Events
-                    </div>
-                    <div className="w-10"></div>
-                </div>
-
-                <div className="px-4 pt-4 space-y-4">
-                    {FAMILY_EVENTS.map(event => (
-                        <div key={event.id} className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/5 relative group">
-                            <div className="relative aspect-[4/3] w-full overflow-hidden">
-                                <img 
-                                    src={event.image} 
-                                    alt={event.title} 
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                />
-                                <div className={`absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-bold text-white bg-gradient-to-r ${event.tagColor} shadow-lg uppercase tracking-wider`}>
-                                    {event.tag}
-                                </div>
-                            </div>
-                            <div className={`p-4 flex justify-between items-center relative z-20 bg-gradient-to-br ${event.cardBg}`}>
-                                <div>
-                                    <h3 className="text-base font-bold text-white leading-tight mb-1">{event.title}</h3>
-                                    <p className="text-xs text-gray-300 font-medium opacity-80">{event.subtitle}</p>
-                                </div>
-                                <button className="bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/5 shadow-sm">
-                                    View
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                    <div className="h-6"></div>
-                </div>
-            </div>
-        );
-    }
-
-    return null;
+    );
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#0f0f11] text-white relative overflow-x-hidden animate-in slide-in-from-right duration-300 z-[300]">
-      
-      {/* Top Notification Toast */}
-      <div 
-         className={`fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-[150] transition-all duration-500 ease-out 
-         ${showToast ? 'translate-y-0 opacity-100' : '-translate-y-32 opacity-0 pointer-events-none'}`}
-      >
-         <div className="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-4 flex items-center gap-3 border border-gray-100/20 text-gray-900">
-             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                 <CheckCircle2 className="w-5 h-5 text-green-600" strokeWidth={3} />
-             </div>
-             <div>
-                 <div className="text-sm font-bold">Action Successful</div>
-                 <div className="text-xs text-gray-500 font-medium mt-0.5 leading-tight">Request processed.</div>
-             </div>
-         </div>
-      </div>
+    <div className="w-full min-h-screen bg-[#0f0f11] text-white relative overflow-x-hidden animate-in slide-in-from-right duration-300">
+        
+        {/* Toast Notification */}
+        <div className={`fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-[100] transition-all duration-500 ease-out ${showToast ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'}`}>
+            <div className="bg-[#1a1a1d] border border-white/10 rounded-2xl shadow-2xl p-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                </div>
+                <div>
+                    <div className="text-sm font-bold text-white">Application Sent</div>
+                    <div className="text-xs text-gray-400">You will be notified once approved.</div>
+                </div>
+            </div>
+        </div>
 
-      {/* Content Renderer */}
-      {renderContent()}
+        {renderContent()}
+
+        {/* Floating Bottom Navigation */}
+        {['home', 'rankings', 'events'].includes(activeTab) && !isApplying && createFlowStep === 'idle' && !showDiscoverList && !showBenefits && (
+             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-[420px] z-50">
+                 <div className="bg-[#0f0f11]/25 backdrop-blur-3xl border border-white/10 rounded-[32px] grid grid-cols-3 px-2 gap-2 items-center py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.6)] ring-1 ring-white/5">
+                     <NavButton 
+                        icon={Home} 
+                        label="Home" 
+                        active={activeTab === 'home'} 
+                        onClick={() => setActiveTab('home')} 
+                     />
+                     <NavButton 
+                        icon={BarChart3} 
+                        label="Rankings" 
+                        active={activeTab === 'rankings'} 
+                        onClick={() => setActiveTab('rankings')} 
+                     />
+                     <NavButton 
+                        icon={Calendar} 
+                        label="Events" 
+                        active={activeTab === 'events'} 
+                        onClick={() => setActiveTab('events')} 
+                     />
+                 </div>
+             </div>
+        )}
     </div>
   );
 };
+
+// Re-use NavButton helper
+const NavButton = ({ icon: Icon, label, active, onClick }: { icon: any, label: string, active: boolean, onClick: () => void }) => (
+    <button 
+        onClick={onClick}
+        className={`relative flex flex-col items-center justify-center w-full h-12 rounded-2xl transition-all duration-300 group`}
+    >
+        <Icon 
+            className={`w-5 h-5 mb-1 transition-all duration-300 ${active ? 'text-[#A540FF] -translate-y-0.5' : 'text-gray-500 group-hover:text-gray-300'}`} 
+            fill="none" 
+            strokeWidth={active ? 2.5 : 2}
+        />
+        <span className={`text-[10px] font-medium transition-colors duration-300 ${active ? 'text-[#A540FF]' : 'text-gray-500 group-hover:text-gray-400'}`}>
+            {label}
+        </span>
+    </button>
+);

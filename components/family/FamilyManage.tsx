@@ -3,7 +3,8 @@ import {
     ChevronLeft, Settings, FilePenLine, MessageSquareQuote, Camera, Image, 
     AlertTriangle, ChevronRight, Users, UserCog, Trophy, ClipboardList, 
     MessageCircle, Mic2, ArrowRightLeft, LogOut, Shield, Crown, User, Plus, Gift, Info, MoreHorizontal,
-    Save, X, Search, Upload, Trash2, CheckCircle2, Check, UserPlus, MicOff, Ban, Star, HeartHandshake, MinusCircle
+    Save, X, Search, Upload, Trash2, CheckCircle2, Check, UserPlus, MicOff, Ban, Star, HeartHandshake, MinusCircle,
+    Wallet, Coins, Lock
 } from 'lucide-react';
 
 interface FamilyManageProps {
@@ -11,7 +12,7 @@ interface FamilyManageProps {
     onSubPageChange?: (isSubPageOpen: boolean) => void;
 }
 
-type DemoRole = 'Chief' | 'Admin' | 'Member';
+type DemoRole = 'Chief' | 'The Arif' | 'Member';
 type SubPageType = 'name' | 'slogan' | 'avatar' | 'cover' | 'disband' | 'list' | 'roles' | 'hero' | 'config' | null;
 
 // --- Sub-Page Components ---
@@ -167,27 +168,27 @@ const ImageEditorPage = ({ title, currentImage, onSave, onBack, isCover = false 
 };
 
 const RoleAppointmentPage = ({ onBack }: any) => {
+    // ... (No changes here, keeping simplified for brevity but in full file it remains)
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [targetRole, setTargetRole] = useState<{ type: string, index: number } | null>(null);
     const [memberSearchTerm, setMemberSearchTerm] = useState('');
     const [showNotification, setShowNotification] = useState(false);
 
     // Mock initial assignments
-    // Fixed slots: Admin (3), Streamer (10), Supporter (10)
     const [assignments, setAssignments] = useState({
-        Chief: [
+        'Tribe Chief': [
             { id: 'u1', name: 'Ahmed_Live', avatar: 'https://image.pollinations.ai/prompt/Handsome%20Saudi%20Arab%20man%20streamer%20wearing%20red%20shemagh%20headset%20talking%20microphone%20professional%20gaming%20studio%20purple%20lighting?width=100&height=100&seed=88&nologo=true' }
         ],
-        Admin: [
+        'The Arif': [
             { id: 'u2', name: 'Desert_King', avatar: 'https://image.pollinations.ai/prompt/Arab%20man%20sunglasses%20cool?width=100&height=100&seed=12&nologo=true' },
             { id: 'u3', name: 'Sarah_Gamer', avatar: 'https://image.pollinations.ai/prompt/Arab%20woman%20gamer%20headset?width=100&height=100&seed=33&nologo=true' },
             null // Empty slot
         ],
-        Streamer: [
+        'Fazaa Knights': [
             { id: 'u4', name: 'Falcon_Eye', avatar: 'https://image.pollinations.ai/prompt/Falcon%20portrait?width=100&height=100&seed=44&nologo=true' },
             null, null, null, null, null, null, null, null, null // 9 Empty
         ],
-        Supporter: [
+        'The Wajeeh': [
             { id: 'u5', name: 'Riyadh_Drift', avatar: 'https://image.pollinations.ai/prompt/Race%20car%20driver?width=100&height=100&seed=55&nologo=true' },
             null, null, null, null, null, null, null, null, null // 9 Empty
         ]
@@ -245,106 +246,111 @@ const RoleAppointmentPage = ({ onBack }: any) => {
                 </div>
             </div>
 
-            <SubPageHeader title="Role Appointment" onBack={onBack} />
+            <SubPageHeader title="Role Management" onBack={onBack} />
             
             <div className="p-4 space-y-8 pb-20">
-                
                 {/* 1. Chief Section */}
                 <section>
                     <div className="flex items-center gap-2 mb-4 px-2">
                         <Crown className="w-5 h-5 text-yellow-500" />
                         <h3 className="text-white font-bold text-lg">Tribe Chief</h3>
                     </div>
-                    {/* Chief is always singular and present */}
                     <div className="flex justify-center">
                         <div className="flex flex-col items-center gap-3">
                              <div className="relative w-20 h-20 rounded-full p-[3px] bg-gradient-to-tr from-yellow-500 to-amber-700 shadow-lg">
                                  <img 
-                                    src={assignments.Chief[0].avatar} 
+                                    src={assignments['Tribe Chief'][0].avatar} 
                                     alt="Chief" 
                                     className="w-full h-full rounded-full object-cover border-2 border-[#1a1a1d]" 
                                  />
-                                 {/* Removed Owner Badge as requested */}
                              </div>
-                             <span className="text-white font-bold text-sm">{assignments.Chief[0].name}</span>
+                             <span className="text-white font-bold text-sm">{assignments['Tribe Chief'][0].name}</span>
                         </div>
                     </div>
                 </section>
 
-                {/* 2. Admin Section */}
+                {/* 2. The Arif Section */}
                 <section>
                     <div className="flex items-center justify-between mb-4 px-2">
                         <div className="flex items-center gap-2">
                             <Shield className="w-5 h-5 text-purple-500" />
-                            <h3 className="text-white font-bold text-lg">Admin</h3>
+                            <h3 className="text-white font-bold text-lg">The Arif</h3>
+                            <button className="p-1.5 rounded-full hover:bg-white/10 transition-colors group/edit">
+                                <FilePenLine className="w-3.5 h-3.5 text-gray-500 group-hover/edit:text-[#A540FF]" />
+                            </button>
                         </div>
-                        <span className="text-xs text-gray-500">{assignments.Admin.filter(Boolean).length}/3</span>
+                        <span className="text-xs text-gray-500">{assignments['The Arif'].filter(Boolean).length}/3</span>
                     </div>
-                    
                     <div className="grid grid-cols-4 gap-4">
-                        {assignments.Admin.map((member, idx) => (
+                        {assignments['The Arif'].map((member, idx) => (
                             <RoleSlot 
                                 key={idx} 
                                 member={member} 
-                                roleType="Admin" 
+                                roleType="The Arif" 
                                 index={idx}
-                                onDelete={() => handleRemove('Admin', idx)}
-                                onAdd={() => handleOpenAdd('Admin', idx)}
+                                onDelete={() => handleRemove('The Arif', idx)}
+                                onAdd={() => handleOpenAdd('The Arif', idx)}
                             />
                         ))}
                     </div>
                     <div className="mt-3 text-[10px] text-gray-500 text-center bg-white/5 py-2 rounded-lg border border-white/5 border-dashed">
-                        Upgrade tribe to Lv.15 to set 4 admins
+                        Upgrade tribe to Lv.15 to set 4 Arifs
                     </div>
                 </section>
 
-                {/* 3. Streamer Section */}
+                {/* 3. Fazaa Knights Section */}
                 <section>
                     <div className="flex items-center justify-between mb-4 px-2">
                         <div className="flex items-center gap-2">
                             <Star className="w-5 h-5 text-pink-500" />
-                            <h3 className="text-white font-bold text-lg">Streamer</h3>
+                            <h3 className="text-white font-bold text-lg">Fazaa Knights</h3>
+                            <button className="p-1.5 rounded-full hover:bg-white/10 transition-colors group/edit">
+                                <FilePenLine className="w-3.5 h-3.5 text-gray-500 group-hover/edit:text-[#A540FF]" />
+                            </button>
                         </div>
-                         <span className="text-xs text-gray-500">{assignments.Streamer.filter(Boolean).length}/10</span>
+                         <span className="text-xs text-gray-500">{assignments['Fazaa Knights'].filter(Boolean).length}/10</span>
                     </div>
                     <div className="grid grid-cols-4 gap-4">
-                         {assignments.Streamer.map((member, idx) => (
+                         {assignments['Fazaa Knights'].map((member, idx) => (
                             <RoleSlot 
                                 key={idx} 
                                 member={member} 
-                                roleType="Streamer" 
+                                roleType="Fazaa Knights" 
                                 index={idx}
-                                onDelete={() => handleRemove('Streamer', idx)}
-                                onAdd={() => handleOpenAdd('Streamer', idx)}
+                                onDelete={() => handleRemove('Fazaa Knights', idx)}
+                                onAdd={() => handleOpenAdd('Fazaa Knights', idx)}
                             />
                         ))}
                     </div>
                 </section>
 
-                {/* 4. Supporter Section */}
+                {/* 4. The Wajeeh Section */}
                 <section>
                     <div className="flex items-center justify-between mb-4 px-2">
                         <div className="flex items-center gap-2">
                             <HeartHandshake className="w-5 h-5 text-blue-500" />
-                            <h3 className="text-white font-bold text-lg">Supporter</h3>
+                            <h3 className="text-white font-bold text-lg">The Wajeeh</h3>
+                            <button className="p-1.5 rounded-full hover:bg-white/10 transition-colors group/edit">
+                                <FilePenLine className="w-3.5 h-3.5 text-gray-500 group-hover/edit:text-[#A540FF]" />
+                            </button>
                         </div>
-                         <span className="text-xs text-gray-500">{assignments.Supporter.filter(Boolean).length}/10</span>
+                         <span className="text-xs text-gray-500">{assignments['The Wajeeh'].filter(Boolean).length}/10</span>
                     </div>
                     <div className="grid grid-cols-4 gap-4">
-                         {assignments.Supporter.map((member, idx) => (
+                         {assignments['The Wajeeh'].map((member, idx) => (
                             <RoleSlot 
                                 key={idx} 
                                 member={member} 
-                                roleType="Supporter" 
+                                roleType="The Wajeeh" 
                                 index={idx}
-                                onDelete={() => handleRemove('Supporter', idx)}
-                                onAdd={() => handleOpenAdd('Supporter', idx)}
+                                onDelete={() => handleRemove('The Wajeeh', idx)}
+                                onAdd={() => handleOpenAdd('The Wajeeh', idx)}
                             />
                         ))}
                     </div>
                 </section>
 
-                {/* Bottom Hint - Styled to match Admin section */}
+                {/* Bottom Hint */}
                 <div className="mt-6 text-[10px] text-gray-500 text-center bg-white/5 py-3 rounded-lg border border-white/5 border-dashed">
                     Upgrade tribe to Lv.30 to customize role names
                 </div>
@@ -355,15 +361,12 @@ const RoleAppointmentPage = ({ onBack }: any) => {
                 <div className="fixed inset-0 z-[100] flex flex-col justify-end items-center">
                     <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsAddModalOpen(false)} />
                     <div className="relative w-full max-w-md bg-[#1a1a1d] rounded-t-3xl border-t border-white/10 h-[80vh] flex flex-col animate-in slide-in-from-bottom duration-300 shadow-2xl">
-                        {/* Modal Header */}
                         <div className="p-4 border-b border-white/5 flex items-center justify-between">
                             <div className="text-lg font-bold text-white">Select Member</div>
                             <button onClick={() => setIsAddModalOpen(false)} className="p-2 bg-white/5 rounded-full">
                                 <X className="w-5 h-5 text-gray-400" />
                             </button>
                         </div>
-                        
-                        {/* Search */}
                         <div className="p-4 border-b border-white/5">
                              <div className="relative">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -376,8 +379,6 @@ const RoleAppointmentPage = ({ onBack }: any) => {
                                 />
                             </div>
                         </div>
-
-                        {/* List - Redesigned to be flat list with dividers */}
                         <div className="flex-1 overflow-y-auto px-0 pb-10">
                             {candidates.map(candidate => (
                                 <div key={candidate.id} className="flex items-center justify-between px-6 py-4 border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
@@ -419,7 +420,6 @@ const RoleSlot = ({ member, roleType, index, onDelete, onAdd }: any) => {
                             alt={member.name} 
                             className="w-full h-full rounded-full object-cover border border-white/10"
                         />
-                        {/* Delete Badge */}
                         <button 
                             onClick={onDelete}
                             className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center border border-[#0f0f11] shadow-sm active:scale-90 transition-transform z-10"
@@ -448,26 +448,27 @@ const MemberListPage = ({ onBack }: any) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedMember, setSelectedMember] = useState<any>(null); // For Action Sheet
     
-    // Mock Members with random verified status and followers
-    const members = Array.from({ length: 20 }).map((_, i) => ({
-        id: i,
-        name: i === 0 ? "Ahmed_Live" : `Member_${i + 1}`,
-        role: i === 0 ? 'Chief' : i < 3 ? 'Admin' : 'Member',
-        avatar: `https://image.pollinations.ai/prompt/avatar${i}?width=100&height=100&seed=${i}&nologo=true`,
-        level: Math.floor(Math.random() * 50) + 1,
-        verified: Math.random() > 0.7, // Random verification
-        followers: (Math.floor(Math.random() * 900000) + 1200).toLocaleString() // formatted number
-    }));
+    // Mock Members
+    const members = Array.from({ length: 20 }).map((_, i) => {
+        const roles = ['The Arif', 'Fazaa Knights', 'The Wajeeh', 'Member'];
+        const role = i === 0 ? 'Tribe Chief' : i < 3 ? 'The Arif' : roles[Math.floor(Math.random() * roles.length)];
+        return {
+            id: i,
+            name: i === 0 ? "Ahmed_Live" : `Member_${i + 1}`,
+            role: role,
+            avatar: `https://image.pollinations.ai/prompt/avatar${i}?width=100&height=100&seed=${i}&nologo=true`,
+            level: Math.floor(Math.random() * 50) + 1,
+            verified: Math.random() > 0.7, 
+            followers: (Math.floor(Math.random() * 900000) + 1200).toLocaleString() 
+        };
+    });
 
     const filteredMembers = members.filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
         <div className="min-h-screen bg-[#0f0f11] animate-in slide-in-from-right duration-300 relative">
-            {/* 1. Header with Count/Max - Updated to match entry point */}
             <SubPageHeader title="Member List (20/80)" onBack={onBack} />
-            
             <div className="px-4 py-3 sticky top-[73px] bg-[#0f0f11] z-30">
-                {/* Search Bar */}
                 <div className="relative mb-4">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input 
@@ -478,8 +479,6 @@ const MemberListPage = ({ onBack }: any) => {
                         className="w-full bg-[#1a1a1d] border border-white/5 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-600 outline-none focus:border-[#A540FF]/50 transition-colors"
                     />
                 </div>
-
-                {/* 2. Invite Button & Hint Text */}
                 <div className="mb-2">
                     <button className="w-full bg-gradient-to-r from-[#A540FF] to-purple-700 hover:brightness-110 active:scale-[0.98] transition-all rounded-xl py-3 flex items-center justify-center gap-2 shadow-lg shadow-purple-900/20 border border-white/10">
                         <div className="bg-white/20 p-1 rounded-full">
@@ -492,7 +491,6 @@ const MemberListPage = ({ onBack }: any) => {
                     </p>
                 </div>
             </div>
-
             <div className="pb-20 mt-0">
                 <div className="bg-[#1a1a1d] rounded-2xl mx-4 overflow-hidden border border-white/5">
                     {filteredMembers.map((member) => (
@@ -502,7 +500,6 @@ const MemberListPage = ({ onBack }: any) => {
                                     <img src={member.avatar} className="w-12 h-12 rounded-full object-cover" alt={member.name} />
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    {/* Line 1: Name + Verified */}
                                     <div className="flex items-center gap-1.5">
                                         <div className="text-sm font-bold text-white leading-none">{member.name}</div>
                                         {member.verified && (
@@ -511,24 +508,18 @@ const MemberListPage = ({ onBack }: any) => {
                                             </div>
                                         )}
                                     </div>
-
-                                    {/* Line 2: Role */}
                                     <div className={`text-[10px] inline-block font-bold tracking-wide ${
-                                        member.role === 'Chief' ? 'text-yellow-500' :
-                                        member.role === 'Admin' ? 'text-purple-400' :
+                                        member.role === 'Tribe Chief' ? 'text-yellow-500' :
+                                        member.role === 'The Arif' ? 'text-purple-400' :
+                                        member.role === 'Fazaa Knights' ? 'text-pink-400' :
+                                        member.role === 'The Wajeeh' ? 'text-blue-400' :
                                         'text-gray-400'
                                     }`}>
                                         {member.role}
                                     </div>
-
-                                    {/* Line 3: Followers */}
-                                    <div className="text-[10px] text-gray-500 font-medium">
-                                        Followers {member.followers}
-                                    </div>
+                                    <div className="text-[10px] text-gray-500 font-medium">Followers {member.followers}</div>
                                 </div>
                             </div>
-                            
-                            {/* 3. More Action Button */}
                             <button 
                                 onClick={() => setSelectedMember(member)}
                                 className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-gray-400 group-hover:text-white transition-colors"
@@ -539,22 +530,14 @@ const MemberListPage = ({ onBack }: any) => {
                     ))}
                 </div>
             </div>
-
-            {/* 4. Action Sheet / Context Menu */}
             {selectedMember && (
                 <div className="fixed inset-0 z-[100] flex flex-col justify-end items-center">
-                    {/* Backdrop */}
                     <div 
                         className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
                         onClick={() => setSelectedMember(null)}
                     />
-                    
-                    {/* Menu Content */}
                     <div className="relative w-full max-w-md bg-[#1a1a1d] rounded-t-3xl border-t border-white/10 p-6 animate-in slide-in-from-bottom duration-300 shadow-2xl">
-                        {/* Drag Handle */}
                         <div className="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
-
-                        {/* Selected User Summary */}
                         <div className="flex items-center gap-4 mb-8 pb-6 border-b border-white/5">
                             <img src={selectedMember.avatar} className="w-14 h-14 rounded-full object-cover border-2 border-[#A540FF]/20" alt={selectedMember.name} />
                             <div>
@@ -565,8 +548,6 @@ const MemberListPage = ({ onBack }: any) => {
                                 <div className="text-sm text-gray-400">{selectedMember.role} • Followers {selectedMember.followers}</div>
                             </div>
                         </div>
-
-                        {/* Actions Grid */}
                         <div className="space-y-3">
                             <button className="w-full bg-[#252529] hover:bg-[#2f2f33] active:scale-[0.99] transition-all p-4 rounded-xl flex items-center justify-between group">
                                 <div className="flex items-center gap-3">
@@ -580,7 +561,6 @@ const MemberListPage = ({ onBack }: any) => {
                                 </div>
                                 <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white" />
                             </button>
-
                             <button className="w-full bg-[#252529] hover:bg-[#2f2f33] active:scale-[0.99] transition-all p-4 rounded-xl flex items-center justify-between group">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center group-hover:bg-yellow-500/20 transition-colors">
@@ -594,8 +574,6 @@ const MemberListPage = ({ onBack }: any) => {
                                 <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white" />
                             </button>
                         </div>
-
-                        {/* Cancel Button */}
                         <button 
                             onClick={() => setSelectedMember(null)}
                             className="w-full mt-6 bg-[#0f0f11] text-gray-400 font-bold py-4 rounded-xl active:scale-[0.98] border border-white/5 transition-all"
@@ -686,7 +664,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
         return <RoleAppointmentPage onBack={() => setActiveSubPage(null)} />;
     }
 
-    // General Settings Configuration
+    // General Settings Configuration - Removed Tasks
     const generalSections = [
         {
             id: 'management',
@@ -703,15 +681,8 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
             title: "Member Management",
             items: [
                 { id: 'list', page: 'list', icon: Users, label: 'Member List', value: '20 / 80' },
-                { id: 'roles', page: 'roles', icon: UserCog, label: 'Role Appointment', value: '' }, // Updated to 'roles' page
+                { id: 'roles', page: 'roles', icon: UserCog, label: 'Role Management', value: '' }, // Updated Label
                 { id: 'hero', page: null, icon: Trophy, label: 'Hero Hall Setting', value: 'Lv.10 Required', locked: true },
-            ]
-        },
-        {
-            id: 'tasks',
-            title: "Task Configuration",
-            items: [
-                { id: 'config', page: null, icon: ClipboardList, label: 'Tribe Tasks', value: '3 Active' },
             ]
         }
     ];
@@ -720,7 +691,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
     const getVisibleSections = () => {
         return generalSections.map(section => {
             if (demoRole === 'Member') {
-                if (['management', 'members', 'tasks'].includes(section.id)) return null;
+                if (['management', 'members'].includes(section.id)) return null;
             }
             const visibleItems = section.items.filter(item => {
                 return true;
@@ -813,26 +784,65 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                         </p>
                     </div>
 
-                    {/* 3. Family BOX */}
-                    <div className="p-4">
-                        <div className="flex justify-between items-start">
-                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
-                                    <Gift className="w-4 h-4" />
+                </div>
+            </div>
+        );
+    };
+
+    // New Tribal Fund Section
+    const renderTribalFundSection = () => {
+        return (
+            <div className="mb-6 animate-in slide-in-from-bottom-2 duration-500 delay-200">
+                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 px-2">Tribal Fund</h3>
+                <div className="bg-[#1a1a1d] rounded-2xl overflow-hidden border border-white/5 shadow-sm divide-y divide-white/5">
+                    {/* Card 1: Fund Balance */}
+                    <div className="p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
+                                <Wallet className="w-5 h-5 text-[#A540FF]" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[10px] text-gray-500 font-medium">Fund Balance</span>
+                                <div className="flex items-center gap-1">
+                                    <span className="text-lg font-bold text-white">24,500</span>
+                                    <span className="text-xs text-gray-400 font-normal">Coins</span>
                                 </div>
-                                <div>
-                                    <div className="text-sm font-medium text-white">Tribe Box</div>
+                            </div>
+                        </div>
+                        <button className="bg-[#A540FF] hover:bg-[#9333ea] text-white text-xs font-bold px-5 py-1.5 rounded-full transition-all active:scale-95 shadow-lg shadow-purple-900/20">
+                            Top up
+                        </button>
+                    </div>
+
+                    {/* Card 2: Send Tribe Box (Restricted) */}
+                    {(demoRole === 'Chief' || demoRole === 'The Arif') ? (
+                        <div className="p-4 flex items-center justify-between">
+                             <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
+                                    <Gift className="w-5 h-5 text-yellow-500" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium text-white">Tribe Box</span>
+                                    <span className="text-[10px] text-gray-500">Send gifts to active members</span>
                                 </div>
                              </div>
-                             <button className="bg-[#A540FF] hover:bg-[#9333ea] text-white text-xs font-bold px-5 py-1.5 rounded-full transition-colors active:scale-95 shadow-lg shadow-purple-500/20">
+                             <button className="bg-[#A540FF] hover:bg-[#9333ea] text-white text-xs font-bold px-5 py-1.5 rounded-full transition-all active:scale-95 shadow-lg shadow-purple-900/20">
                                 Send
                              </button>
                         </div>
-                        <p className="text-[11px] text-gray-500 mt-2 pl-11 leading-relaxed">
-                            Send a surprise box containing Coins or Gems to active members currently online.
-                        </p>
-                    </div>
-
+                    ) : (
+                        <div className="p-4 flex items-center justify-between opacity-50">
+                             <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-500">
+                                    <Lock className="w-5 h-5" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium text-gray-400">Tribe Box</span>
+                                    <span className="text-[10px] text-gray-600">Admin Only</span>
+                                </div>
+                             </div>
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -894,6 +904,8 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                     </div>
                 ))}
 
+                {renderTribalFundSection()}
+
                 {renderInteractionSection()}
 
                 <div className="mt-8 space-y-3">
@@ -942,15 +954,15 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                      </button>
 
                      <button 
-                        onClick={() => setDemoRole('Admin')}
+                        onClick={() => setDemoRole('The Arif')}
                         className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all active:scale-95 ${
-                            demoRole === 'Admin' 
+                            demoRole === 'The Arif' 
                             ? 'bg-purple-500/20 border-purple-500 text-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.2)]' 
                             : 'bg-[#1a1a1d] border-white/5 text-gray-500 hover:bg-white/5'
                         }`}
                      >
                          <Shield className="w-5 h-5 mb-1.5" />
-                         <span className="text-xs font-bold">I'm Admin</span>
+                         <span className="text-xs font-bold">I'm The Arif</span>
                      </button>
 
                      <button 
@@ -968,7 +980,7 @@ export const FamilyManage: React.FC<FamilyManageProps> = ({ onBack, onSubPageCha
                  
                  <div className="mt-4 text-[10px] text-gray-600 text-center px-4">
                      {demoRole === 'Chief' && "Full access. Can Transfer. Cannot Leave."}
-                     {demoRole === 'Admin' && "Can Manage Members & Tasks. Cannot Disband/Transfer."}
+                     {demoRole === 'The Arif' && "Can Manage Members & Tasks. Cannot Disband/Transfer."}
                      {demoRole === 'Member' && "Read-only access to most settings. Can Leave Tribe."}
                  </div>
              </div>
